@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Constraint Contradictions
+  version: 1.0.0
+paths:
+  /semantic-checks:
+    get:
+      summary: Showcase semantic contradictions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstraintShowcase'
+
+components:
+  schemas:
+    ConstraintShowcase:
+      type: object
+      properties:
+        enumContradiction:
+          type: integer
+          enum: [1, 2, "3"]
+          description: "String enum value contradicts integer schema type"
+        regexIncompatibility:
+          type: string
+          maxLength: 2
+          pattern: '^abc$'
+          description: "maxLength 2 is impossible for regex that only matches 3 characters"
+        boundaryViolation:
+          type: integer
+          minimum: 10
+          exclusiveMaximum: 10
+          description: "No integer can be >= 10 and < 10"
+        incompleteSchemaType:
+          type: array
+          description: "Array schema missing items definition"

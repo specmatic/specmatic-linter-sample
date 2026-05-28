@@ -1,0 +1,8 @@
+rules:
+  no-enum-type-mismatch: error
+  specmatic/invalid-numeric-bounds: error
+  specmatic/pattern-length-incompatible: error
+  specmatic/security-property-redefined: error
+  specmatic/ref-has-siblings: error
+  specmatic/missing-schema-fallback: error
+  specmatic/get-request-body-disallowed: error

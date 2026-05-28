@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: JS Plugin Violation Example
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Incorrect operationId and risky pagination
+      operationId: findUsers # ❌ Violation: rule/operation-id-naming (expected getUsers)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 600
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 500 # ❌ Violation: rule/pagination-range (sum 1100 > 1000)
+      responses:
+        '200': { description: OK }
+
+  /orders:
+    get:
+      summary: Valid naming
+      operationId: getOrders # ✅ Correct
+      responses:
+        '200': { description: OK }

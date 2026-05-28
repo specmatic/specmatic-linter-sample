@@ -1,0 +1,1631 @@
+openapi: 3.0.3
+info:
+  title: Enterprise Spec 33
+  version: 1.0.0
+
+paths:
+  /api/v1/resource-0:
+    get:
+      summary: Resource 0
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-1:
+    get:
+      summary: Resource 1
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-2:
+    get:
+      summary: Resource 2
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-3:
+    get:
+      summary: Resource 3
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-4:
+    get:
+      summary: Resource 4
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-4"]
+  /api/v1/resource-5:
+    get:
+      summary: Resource 5
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-6:
+    get:
+      summary: Resource 6
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-7:
+    get:
+      summary: Resource 7
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-8:
+    get:
+      summary: Resource 8
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-9:
+    get:
+      summary: Resource 9
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-10:
+    get:
+      summary: Resource 10
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-11:
+    get:
+      summary: Resource 11
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-12:
+    get:
+      summary: Resource 12
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-13:
+    get:
+      summary: Resource 13
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-14:
+    get:
+      summary: Resource 14
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-15:
+    get:
+      summary: Resource 15
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-15"]
+  /api/v1/resource-16:
+    get:
+      summary: Resource 16
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-17:
+    get:
+      summary: Resource 17
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-18:
+    get:
+      summary: Resource 18
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-19:
+    get:
+      summary: Resource 19
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-20:
+    get:
+      summary: Resource 20
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-21:
+    get:
+      summary: Resource 21
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-22:
+    get:
+      summary: Resource 22
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-23:
+    get:
+      summary: Resource 23
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-24:
+    get:
+      summary: Resource 24
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-25:
+    get:
+      summary: Resource 25
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-26:
+    get:
+      summary: Resource 26
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-27:
+    get:
+      summary: Resource 27
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-28:
+    get:
+      summary: Resource 28
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-29:
+    get:
+      summary: Resource 29
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-30:
+    get:
+      summary: Resource 30
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-30"]
+  /api/v1/resource-31:
+    get:
+      summary: Resource 31
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-32:
+    get:
+      summary: Resource 32
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-33:
+    get:
+      summary: Resource 33
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-34:
+    get:
+      summary: Resource 34
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-35:
+    get:
+      summary: Resource 35
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-36:
+    get:
+      summary: Resource 36
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-37:
+    get:
+      summary: Resource 37
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-38:
+    get:
+      summary: Resource 38
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-39:
+    get:
+      summary: Resource 39
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-40:
+    get:
+      summary: Resource 40
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-41:
+    get:
+      summary: Resource 41
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-42:
+    get:
+      summary: Resource 42
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-43:
+    get:
+      summary: Resource 43
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-44:
+    get:
+      summary: Resource 44
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-45:
+    get:
+      summary: Resource 45
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-46:
+    get:
+      summary: Resource 46
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-46"]
+  /api/v1/resource-47:
+    get:
+      summary: Resource 47
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-48:
+    get:
+      summary: Resource 48
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-49:
+    get:
+      summary: Resource 49
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-49"]
+  /api/v1/resource-50:
+    get:
+      summary: Resource 50
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-51:
+    get:
+      summary: Resource 51
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-52:
+    get:
+      summary: Resource 52
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-53:
+    get:
+      summary: Resource 53
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-54:
+    get:
+      summary: Resource 54
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-55:
+    get:
+      summary: Resource 55
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-56:
+    get:
+      summary: Resource 56
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-57:
+    get:
+      summary: Resource 57
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-58:
+    get:
+      summary: Resource 58
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-59:
+    get:
+      summary: Resource 59
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-60:
+    get:
+      summary: Resource 60
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-61:
+    get:
+      summary: Resource 61
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-62:
+    get:
+      summary: Resource 62
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-63:
+    get:
+      summary: Resource 63
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-64:
+    get:
+      summary: Resource 64
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-65:
+    get:
+      summary: Resource 65
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-66:
+    get:
+      summary: Resource 66
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-66"]
+  /api/v1/resource-67:
+    get:
+      summary: Resource 67
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-68:
+    get:
+      summary: Resource 68
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-69:
+    get:
+      summary: Resource 69
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-70:
+    get:
+      summary: Resource 70
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-71:
+    get:
+      summary: Resource 71
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-72:
+    get:
+      summary: Resource 72
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-73:
+    get:
+      summary: Resource 73
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-74:
+    get:
+      summary: Resource 74
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-75:
+    get:
+      summary: Resource 75
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-76:
+    get:
+      summary: Resource 76
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-77:
+    get:
+      summary: Resource 77
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-78:
+    get:
+      summary: Resource 78
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-79:
+    get:
+      summary: Resource 79
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-80:
+    get:
+      summary: Resource 80
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-80"]
+  /api/v1/resource-81:
+    get:
+      summary: Resource 81
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-82:
+    get:
+      summary: Resource 82
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-83:
+    get:
+      summary: Resource 83
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-84:
+    get:
+      summary: Resource 84
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-85:
+    get:
+      summary: Resource 85
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-86:
+    get:
+      summary: Resource 86
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-87:
+    get:
+      summary: Resource 87
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-88:
+    get:
+      summary: Resource 88
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-89:
+    get:
+      summary: Resource 89
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-90:
+    get:
+      summary: Resource 90
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-91:
+    get:
+      summary: Resource 91
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-92:
+    get:
+      summary: Resource 92
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-93:
+    get:
+      summary: Resource 93
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-94:
+    get:
+      summary: Resource 94
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-95:
+    get:
+      summary: Resource 95
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-96:
+    get:
+      summary: Resource 96
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-97:
+    get:
+      summary: Resource 97
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-98:
+    get:
+      summary: Resource 98
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-99:
+    get:
+      summary: Resource 99
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-99"]
+  /api/v1/resource-100:
+    get:
+      summary: Resource 100
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-101:
+    get:
+      summary: Resource 101
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-102:
+    get:
+      summary: Resource 102
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-103:
+    get:
+      summary: Resource 103
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-104:
+    get:
+      summary: Resource 104
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-105:
+    get:
+      summary: Resource 105
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-106:
+    get:
+      summary: Resource 106
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-106"]
+  /api/v1/resource-107:
+    get:
+      summary: Resource 107
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-108:
+    get:
+      summary: Resource 108
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-109:
+    get:
+      summary: Resource 109
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-109"]
+  /api/v1/resource-110:
+    get:
+      summary: Resource 110
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-111:
+    get:
+      summary: Resource 111
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-112:
+    get:
+      summary: Resource 112
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-113:
+    get:
+      summary: Resource 113
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-114:
+    get:
+      summary: Resource 114
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-115:
+    get:
+      summary: Resource 115
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-116:
+    get:
+      summary: Resource 116
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-116"]
+  /api/v1/resource-117:
+    get:
+      summary: Resource 117
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-118:
+    get:
+      summary: Resource 118
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-119:
+    get:
+      summary: Resource 119
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-120:
+    get:
+      summary: Resource 120
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-121:
+    get:
+      summary: Resource 121
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-122:
+    get:
+      summary: Resource 122
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-123:
+    get:
+      summary: Resource 123
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-124:
+    get:
+      summary: Resource 124
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-125:
+    get:
+      summary: Resource 125
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-126:
+    get:
+      summary: Resource 126
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-127:
+    get:
+      summary: Resource 127
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-128:
+    get:
+      summary: Resource 128
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-129:
+    get:
+      summary: Resource 129
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-130:
+    get:
+      summary: Resource 130
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-131:
+    get:
+      summary: Resource 131
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-132:
+    get:
+      summary: Resource 132
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-133:
+    get:
+      summary: Resource 133
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-134:
+    get:
+      summary: Resource 134
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-135:
+    get:
+      summary: Resource 135
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-135"]
+  /api/v1/resource-136:
+    get:
+      summary: Resource 136
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-137:
+    get:
+      summary: Resource 137
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-138:
+    get:
+      summary: Resource 138
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-139:
+    get:
+      summary: Resource 139
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-140:
+    get:
+      summary: Resource 140
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-141:
+    get:
+      summary: Resource 141
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-142:
+    get:
+      summary: Resource 142
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-143:
+    get:
+      summary: Resource 143
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-144:
+    get:
+      summary: Resource 144
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-145:
+    get:
+      summary: Resource 145
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-146:
+    get:
+      summary: Resource 146
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-147:
+    get:
+      summary: Resource 147
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-148:
+    get:
+      summary: Resource 148
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-149:
+    get:
+      summary: Resource 149
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-150:
+    get:
+      summary: Resource 150
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-151:
+    get:
+      summary: Resource 151
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-152:
+    get:
+      summary: Resource 152
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-153:
+    get:
+      summary: Resource 153
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-154:
+    get:
+      summary: Resource 154
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-155:
+    get:
+      summary: Resource 155
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-156:
+    get:
+      summary: Resource 156
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-157:
+    get:
+      summary: Resource 157
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-157"]
+  /api/v1/resource-158:
+    get:
+      summary: Resource 158
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-159:
+    get:
+      summary: Resource 159
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-159"]
+  /api/v1/resource-160:
+    get:
+      summary: Resource 160
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-161:
+    get:
+      summary: Resource 161
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-162:
+    get:
+      summary: Resource 162
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-163:
+    get:
+      summary: Resource 163
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-163"]
+  /api/v1/resource-164:
+    get:
+      summary: Resource 164
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-164"]
+  /api/v1/resource-165:
+    get:
+      summary: Resource 165
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-166:
+    get:
+      summary: Resource 166
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-167:
+    get:
+      summary: Resource 167
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-168:
+    get:
+      summary: Resource 168
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-169:
+    get:
+      summary: Resource 169
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-170:
+    get:
+      summary: Resource 170
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-171:
+    get:
+      summary: Resource 171
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-172:
+    get:
+      summary: Resource 172
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-173:
+    get:
+      summary: Resource 173
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-174:
+    get:
+      summary: Resource 174
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-175:
+    get:
+      summary: Resource 175
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-176:
+    get:
+      summary: Resource 176
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-177:
+    get:
+      summary: Resource 177
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-178:
+    get:
+      summary: Resource 178
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-179:
+    get:
+      summary: Resource 179
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-180:
+    get:
+      summary: Resource 180
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-181:
+    get:
+      summary: Resource 181
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-182:
+    get:
+      summary: Resource 182
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-183:
+    get:
+      summary: Resource 183
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-184:
+    get:
+      summary: Resource 184
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-185:
+    get:
+      summary: Resource 185
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-186:
+    get:
+      summary: Resource 186
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-187:
+    get:
+      summary: Resource 187
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-188:
+    get:
+      summary: Resource 188
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-189:
+    get:
+      summary: Resource 189
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-190:
+    get:
+      summary: Resource 190
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-191:
+    get:
+      summary: Resource 191
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-192:
+    get:
+      summary: Resource 192
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-193:
+    get:
+      summary: Resource 193
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-193"]
+  /api/v1/resource-194:
+    get:
+      summary: Resource 194
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-195:
+    get:
+      summary: Resource 195
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-195"]
+  /api/v1/resource-196:
+    get:
+      summary: Resource 196
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-197:
+    get:
+      summary: Resource 197
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-198:
+    get:
+      summary: Resource 198
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-199:
+    get:
+      summary: Resource 199
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-200:
+    get:
+      summary: Resource 200
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-201:
+    get:
+      summary: Resource 201
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-202:
+    get:
+      summary: Resource 202
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-203:
+    get:
+      summary: Resource 203
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-204:
+    get:
+      summary: Resource 204
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-205:
+    get:
+      summary: Resource 205
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-206:
+    get:
+      summary: Resource 206
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-207:
+    get:
+      summary: Resource 207
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-208:
+    get:
+      summary: Resource 208
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-209:
+    get:
+      summary: Resource 209
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-209"]
+  /api/v1/resource-210:
+    get:
+      summary: Resource 210
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-211:
+    get:
+      summary: Resource 211
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-211"]
+  /api/v1/resource-212:
+    get:
+      summary: Resource 212
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-213:
+    get:
+      summary: Resource 213
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-214:
+    get:
+      summary: Resource 214
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-215:
+    get:
+      summary: Resource 215
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-216:
+    get:
+      summary: Resource 216
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-217:
+    get:
+      summary: Resource 217
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-218:
+    get:
+      summary: Resource 218
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-219:
+    get:
+      summary: Resource 219
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-220:
+    get:
+      summary: Resource 220
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-221:
+    get:
+      summary: Resource 221
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-222:
+    get:
+      summary: Resource 222
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-223:
+    get:
+      summary: Resource 223
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-224:
+    get:
+      summary: Resource 224
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-225:
+    get:
+      summary: Resource 225
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-226:
+    get:
+      summary: Resource 226
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-227:
+    get:
+      summary: Resource 227
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-228:
+    get:
+      summary: Resource 228
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-229:
+    get:
+      summary: Resource 229
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-230:
+    get:
+      summary: Resource 230
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-231:
+    get:
+      summary: Resource 231
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-232:
+    get:
+      summary: Resource 232
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-233:
+    get:
+      summary: Resource 233
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-233"]
+  /api/v1/resource-234:
+    get:
+      summary: Resource 234
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-235:
+    get:
+      summary: Resource 235
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-235"]
+  /api/v1/resource-236:
+    get:
+      summary: Resource 236
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-237:
+    get:
+      summary: Resource 237
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-238:
+    get:
+      summary: Resource 238
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-238"]
+  /api/v1/resource-239:
+    get:
+      summary: Resource 239
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-239"]
+  /api/v1/resource-240:
+    get:
+      summary: Resource 240
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-241:
+    get:
+      summary: Resource 241
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-242:
+    get:
+      summary: Resource 242
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-243:
+    get:
+      summary: Resource 243
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-244:
+    get:
+      summary: Resource 244
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-245:
+    get:
+      summary: Resource 245
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-246:
+    get:
+      summary: Resource 246
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-247:
+    get:
+      summary: Resource 247
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                enum: [1, 2, "error-33-247"]
+  /api/v1/resource-248:
+    get:
+      summary: Resource 248
+      responses:
+        '200':
+          description: OK
+  /api/v1/resource-249:
+    get:
+      summary: Resource 249
+      responses:
+        '200':
+          description: OK

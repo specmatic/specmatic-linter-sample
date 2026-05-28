@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: Violating Corporate Standards
+  version: 1.0.0
+paths:
+  /orders:
+    get:
+      summary: API with standard violations
+      parameters:
+        - name: error # ❌ Violation: rule/no-error-param (disallowed name)
+          in: query
+          required: false
+          description: "error"
+          schema: { type: string }
+        - name: userId
+          in: query
+          required: true
+          # ❌ Violation: rule/parameter-description-required (missing description)
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http # ❌ Violation: rule/force-oidc-auth (must be openIdConnect for OIDC)
+      scheme: basic

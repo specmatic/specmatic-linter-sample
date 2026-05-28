@@ -1,0 +1,85 @@
+extends:
+  - recommended
+
+rules:
+  no-unresolved-refs: error
+  path-parameters-defined: error
+  no-required-schema-properties-undefined: warn
+  rule/parameter-name-defined:
+    severity: error
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - name
+  rule/parameter-schema-defined:
+    severity: error
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - schema
+  rule/security-scheme-supported:
+    severity: warn
+    subject:
+      type: SecurityScheme
+      property: type
+    assertions:
+      enum:
+        - oauth2
+        - http
+        - apiKey
+  rule/security-http-scheme-supported:
+    severity: warn
+    subject:
+      type: SecurityScheme
+      property: scheme
+    where:
+      - subject:
+          type: SecurityScheme
+          property: type
+        assertions:
+          const: http
+    assertions:
+      enum:
+        - bearer
+        - basic
+  rule/security-apikey-location-supported:
+    severity: warn
+    subject:
+      type: SecurityScheme
+      property: in
+    where:
+      - subject:
+          type: SecurityScheme
+          property: type
+        assertions:
+          const: apiKey
+    assertions:
+      enum:
+        - header
+        - query
+  specmatic/invalid-operation-status: error
+  specmatic/invalid-additional-properties-usage: warn
+  specmatic/invalid-parameter-shape: error
+  specmatic/query-param-collision: error
+  specmatic/required-query-object-conflict: warn
+  specmatic/invalid-min-length: error
+  specmatic/invalid-max-length: error
+  specmatic/invalid-numeric-bounds: error
+  specmatic/length-exceeds-limit: warn
+  specmatic/pattern-length-incompatible: error
+  specmatic/accept-response-content-type-conflict: warn
+  specmatic/content-type-header-declared: warn
+  specmatic/content-type-header-overrides-media-type: warn
+  specmatic/security-property-redefined: warn
+  specmatic/security-scheme-missing: error
+  specmatic/ref-has-siblings: warn
+  specmatic/schema-unclear: warn
+  specmatic/missing-schema-fallback: error
+  specmatic/invalid-regex-format: error
+  specmatic/oas30-enum-null-coercion: error
+  specmatic/enum-nullability-coercion: error
+  specmatic/enum-value-schema-mismatch: error
+  specmatic/enum-no-matching-values: error
+  specmatic/get-request-body-disallowed: error
