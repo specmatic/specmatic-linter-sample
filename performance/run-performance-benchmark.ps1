@@ -51,7 +51,7 @@ $argumentList += $specFiles | ForEach-Object { $_.Name }
 $argumentList += @("--format", "json")
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$process = Start-Process -FilePath "docker" -ArgumentList $argumentList -WorkingDirectory $perfDir -RedirectStandardOutput $benchmarkResultFile -RedirectStandardError $stderrFile -PassThru
+$process = Start-Process -FilePath "docker" -ArgumentList $argumentList -WorkingDirectory $perfDir -RedirectStandardOutput $benchmarkResultFile -RedirectStandardError $stderrFile -NoNewWindow -PassThru
 
 $processorCount = [Environment]::ProcessorCount
 $sampleCount = 0
@@ -69,13 +69,22 @@ while (-not $process.HasExited) {
         continue
     }
 
-    $statsLine = docker stats --no-stream --format "{{.CPUPerc}}|{{.MemUsage}}" $containerName 2>$null
+    try {
+        $statsLine = docker stats --no-stream --format "{{.CPUPerc}}|{{.MemUsage}}" $containerName 2>$null
+    } catch {
+        Start-Sleep -Milliseconds 100
+        continue
+    }
     if ([string]::IsNullOrWhiteSpace($statsLine)) {
         Start-Sleep -Milliseconds 100
         continue
     }
 
     $parts = $statsLine -split "\|", 2
+    if ($parts.Count -lt 2) {
+        Start-Sleep -Milliseconds 100
+        continue
+    }
     $cpuPercent = [double](($parts[0] -replace "%", "").Trim())
     $memCurrent = (($parts[1] -split "/", 2)[0]).Trim()
     if ($memCurrent -match '^([0-9.]+)([A-Za-z]+)$') {
@@ -132,10 +141,10 @@ if ($sampleCount -eq 0) {
 
 $durationMs = [int][math]::Round($stopwatch.Elapsed.TotalMilliseconds)
 Write-Host ""
-Write-Host ("✅ SUCCESS: Linted {0} specifications (~{1} paths)" -f $numSpecs, $totalPaths)
-Write-Host ("⏱️  Total Execution Time: {0}ms" -f $durationMs)
+Write-Host ("SUCCESS: Linted {0} specifications (~{1} paths)" -f $numSpecs, $totalPaths)
+Write-Host ("Total Execution Time: {0}ms" -f $durationMs)
 Write-Host ""
-Write-Host "📂 Detailed reports saved to: results/"
+Write-Host "Detailed reports saved to: results/"
 Write-Host "The Specmatic Linter processes complex semantic rules across a massive estate with sub-second average latency."
 
 if (Test-Path $benchmarkResultFile) {
