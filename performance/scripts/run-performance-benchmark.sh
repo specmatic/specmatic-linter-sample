@@ -113,7 +113,8 @@ print_resource_sampling_note() {
 }
 
 # Find the performance directory
-PERF_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PERF_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 # Find the sample root (for shared project metadata)
 SAMPLE_ROOT="$(cd "${PERF_DIR}/.." && pwd)"
 RESULTS_DIR="${PERF_DIR}/results"
@@ -162,7 +163,7 @@ if [ ! -s "${BENCHMARK_RESULT_FILE}" ]; then
 fi
 
 # Use the node formatter to display the table and generate individual result files
-node format-results.js < "${BENCHMARK_RESULT_FILE}"
+node "${SCRIPT_DIR}/format-results.js" < "${BENCHMARK_RESULT_FILE}"
 print_resource_sampling_note "${RESOURCE_SUMMARY_FILE}"
 
 echo ""

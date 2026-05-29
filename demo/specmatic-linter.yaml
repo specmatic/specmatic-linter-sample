@@ -1,0 +1,44 @@
+rules:
+  no-enum-type-mismatch: error
+  specmatic/invalid-numeric-bounds: error
+  specmatic/pattern-length-incompatible: error
+  specmatic/security-property-redefined: error
+  specmatic/ref-has-siblings: error
+  specmatic/missing-schema-fallback: error
+  specmatic/get-request-body-disallowed: error
+
+  # Uncomment this block to enable configurable corporate rules.
+  # rule/no-error-param:
+  #   severity: error
+  #   subject:
+  #     type: Parameter
+  #     property: name
+  #   assertions:
+  #     pattern: '^(?!error$).*$'
+  #   message: "Architectural violation: Parameter names must not be 'error'."
+  #
+  # rule/parameter-description-required:
+  #   severity: error
+  #   subject:
+  #     type: Parameter
+  #   assertions:
+  #     required:
+  #       - description
+  #   message: "Architectural violation: All parameters must have a description."
+  #
+  # rule/force-oidc-auth:
+  #   severity: error
+  #   subject:
+  #     type: SecurityScheme
+  #     property: type
+  #   assertions:
+  #     const: openIdConnect
+  #   message: "Architectural violation: Only OIDC authentication is permitted."
+
+  # Uncomment this block after enabling the plugin below.
+  # corp-standards/pagination-range: error
+  # corp-standards/operation-id-naming: warn
+
+# Uncomment to enable custom JS plugin rules.
+# plugins:
+#   - ./js-plugin/index.js

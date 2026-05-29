@@ -1,9 +1,0 @@
-# Custom Rules via JavaScript Plugin
-# This config loads the custom rules defined in index.js
-
-plugins:
-  - ./index.js
-
-rules:
-  corp-standards/pagination-range: error
-  corp-standards/operation-id-naming: warn

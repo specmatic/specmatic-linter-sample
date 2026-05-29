@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Specmatic Linter Guided Demo
+  version: 1.0.0
+security:
+  - BasicAuth: []
+paths:
+  /semantic-checks:
+    get:
+      summary: Explore semantic linting issues
+      # ❌ Semantic violation: GET operations must not define a requestBody in OAS 3.x
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstraintShowcase'
+
+  /users:
+    get:
+      summary: Exercise configurable and JS plugin rules
+      operationId: findUsers # ❌ JS plugin violation: expected getUsers for GET /users
+      parameters:
+        - name: error # ❌ Configurable rule violation: rule/no-error-param
+          in: query
+          required: false
+          description: A disallowed parameter name used for demo purposes
+          schema:
+            type: string
+        # ❌ Configurable rule violation: rule/parameter-description-required is reported on this parameter object
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+        # ❌ JS plugin violation: pagination-range is reported on the parameters block because limit + offset exceeds 1000
+        - name: limit
+          in: query
+          description: Page size
+          schema:
+            type: integer
+            default: 600
+        - name: offset
+          in: query
+          description: Page offset
+          schema:
+            type: integer
+            default: 500
+      responses:
+        '200':
+          description: OK
+
+  /schema-compositions:
+    get:
+      summary: Show $ref sibling conflicts
+      parameters:
+        - name: X-API-Key
+          in: header
+          description: Shadows the api-key security header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefWithSiblings'
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http # ❌ Configurable rule violation: rule/force-oidc-auth expects openIdConnect
+      scheme: basic
+  schemas:
+    ConstraintShowcase:
+      type: object
+      properties:
+        enumContradiction:
+          type: integer
+          enum: [1, 2, "3"] # ❌ Semantic violation: enum value type does not match integer schema
+          description: String enum value contradicts the integer schema
+        regexIncompatibility:
+          type: string
+          maxLength: 2
+          pattern: '^abc$' # ❌ Semantic violation: shortest matching value is longer than maxLength
+          description: The regex only matches a string longer than the maxLength
+        boundaryViolation:
+          type: integer
+          minimum: 10
+          exclusiveMaximum: 10 # ❌ Semantic violation: no integer can be >= 10 and < 10
+          description: No integer can satisfy both numeric bounds
+        incompleteSchemaType:
+          type: array # ❌ Semantic violation: array schema is missing items
+          description: Arrays need an items schema for clear contract generation
+
+    # ❌ Semantic violation: ref-has-siblings is reported on this schema object
+    RefWithSiblings:
+      $ref: '#/components/schemas/SimpleString' # ❌ Semantic violation: $ref must not be combined with sibling schema fields in OAS 3.0
+      type: string
+      description: In OAS 3.0 sibling fields next to $ref are ignored
+
+    SimpleString:
+      type: string

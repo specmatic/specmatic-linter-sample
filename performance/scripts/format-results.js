@@ -3,9 +3,10 @@ const path = require('path');
 
 const input = fs.readFileSync(0, 'utf8');
 const results = [];
-const specsDir = path.join(__dirname, 'specs');
-const resultsDir = path.join(__dirname, 'results');
-const benchmarkResourcesFile = path.join(__dirname, 'benchmark_resources.json');
+const perfDir = path.join(__dirname, '..');
+const specsDir = path.join(perfDir, 'specs');
+const resultsDir = path.join(perfDir, 'results');
+const benchmarkResourcesFile = path.join(perfDir, 'benchmark_resources.json');
 
 if (!fs.existsSync(resultsDir)) {
     fs.mkdirSync(resultsDir);

@@ -1,12 +1,13 @@
 $ErrorActionPreference = "Stop"
 
-$perfDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$perfDir = Split-Path -Parent $scriptDir
 $sampleRoot = Split-Path -Parent $perfDir
 $resultsDir = Join-Path $perfDir "results"
 $benchmarkResultFile = Join-Path $perfDir "benchmark_result.json"
 $resourceSummaryFile = Join-Path $perfDir "benchmark_resources.json"
 $stderrFile = Join-Path $perfDir "benchmark_stderr.log"
-$formatScript = Join-Path $perfDir "format-results.js"
+$formatScript = Join-Path $scriptDir "format-results.js"
 $containerName = "specmatic-linter-benchmark-{0}" -f ([guid]::NewGuid().ToString("N").Substring(0, 12))
 
 if (Test-Path $resultsDir) {
