@@ -1,31 +1,31 @@
 # Specmatic Linter
 
-Specmatic Linter provides a comprehensive linting solution for several major specification standards. It is designed to identify and report issues locally and in CI/CD pipelines to ensure consistency and compliance with both industry standards and custom organizational policies.
+Specmatic Linter is an enterprise-grade linting solution for modern API and interface specifications. It helps teams detect and report issues during local development and in CI/CD pipelines, enabling consistent quality, stronger governance, and compliance with both industry standards and organization-specific policies.
 
-This sample project provides you a guided walkthrough of Specmatic Linter's capabilities.
+This sample project provides a guided walkthrough of Specmatic Linter's core capabilities.
 
-## Specmatic Linter - Key Capabilities?
-* **Semantic Intelligence**: We understand what your API means, not just what it says.
-* **Executable Contracts**: We lint your specs and validate your examples to ensure they can act as executable, enforceable contracts.
-* **Superior Performance**: High-performance concurrent engine built for enterprise-scale workloads.
-* **Precision-engineered**: High-confidence validation with deterministic rules and low-noise results.
-* **Mission-Critical Reliability**: Production-hardened validation designed for large-scale systems and CI/CD pipelines.
-* **Extensibility**: Easy-to-use DSL for defining custom rules and organisation-specific policies.
-* **Integration**: Shift left (get linting feedback during local development like CLI, IDEs) or run in CI/CD pipelines to block non-compliant specifications before they are published.
-* **Auto-Fix**: Automatically identify and fix semantic and syntax issues.
-* **Best-of-Breed Architecture**: Built on proven patterns while addressing the limitations of traditional linting approaches.
+## Key Capabilities
+* **Semantic intelligence**: Understands the intent of your API, not just its syntax.
+* **Executable contracts**: Lints specifications and validates examples so they can serve as enforceable contracts.
+* **High performance**: Uses a concurrent engine designed for enterprise-scale workloads.
+* **Precision-engineered**: Delivers high-confidence validation with deterministic rules and low-noise results.
+* **Mission-critical reliability**: Supports large-scale systems and CI/CD-driven governance workflows.
+* **Extensibility**: Provides an approachable DSL for custom rules and organization-specific policies.
+* **Flexible integration**: Supports shift-left feedback in local development environments and enforcement in CI/CD pipelines.
+* **Auto-fix**: Establishes the foundation for automated remediation of semantic and syntax issues.
+* **Best-of-breed architecture**: Built on proven patterns to address the practical limitations of conventional linting approaches.
 
 ## Prerequisites
 
-- Docker Engine should be running
+- Docker Engine must be running.
 
 ## Guided Demo
 
 The walkthrough lives in `demo/`:
 
-- `demo/openapi.yaml` contains one spec with intentional violations
-- `demo/specmatic-linter.yaml` starts with only semantic rules enabled
-- `demo/js-plugin/` contains the custom JS plugin you enable later in the walkthrough
+- `demo/openapi.yaml` contains a sample specification with intentional violations.
+- `demo/specmatic-linter.yaml` starts with only semantic rules enabled.
+- `demo/js-plugin/` contains the custom JavaScript plugin.
 
 ### Step 1: Run minimal semantic linting
 
@@ -43,7 +43,7 @@ docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --
   }
 ```
 
-This lints the `openapi.yaml` spec file using the **`minimal` ruleset** containing **58 rules**. Plus **6 additional Specmatic semantic rules** which are configured in `specmatic-linter.yaml` config file
+This command lints `openapi.yaml` using the **`minimal` ruleset**, which contains **58 rules**, along with **6 additional Specmatic semantic rules** configured in `specmatic-linter.yaml`.
 
 You should see the following semantic issues being reported:
 
@@ -57,7 +57,7 @@ You should see the following semantic issues being reported:
 
 ### Step 2: Run recommended semantic linting
 
-Update the `demo/specmatic-linter.yaml` config file, change:
+Update `demo/specmatic-linter.yaml` config file as follows:
 
 ```yaml
 extends:
@@ -71,7 +71,7 @@ extends:
  - recommended
 ```
 
-Rerun the same command
+Rerun the same command:
 
 ```bash
 docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -85,9 +85,9 @@ docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --
   }
 ```
 
-This lints the `openapi.yaml` spec file using the **`recommended` ruleset** containing **84 rules**.
+This lints `openapi.yaml` spec file using the **`recommended` ruleset**, which contains **84 rules**.
 
-Specmatic Linter is capable of catching the following:
+Specmatic Linter can detect issues such as the following:
 
 | Issue Type                  | Other Linters | Specmatic                            |
 |-----------------------------|---------------|--------------------------------------|
@@ -99,11 +99,11 @@ Specmatic Linter is capable of catching the following:
 | Schema Composition Problems | Valid         | Error (Ref has siblings)             |
 | Security Overlaps           | Valid         | Warning (Shadowed Schemes)           |
 
-You can see the full list of Specmatic semantic rules in the `demo/specmatic-linter.yaml` config file under the `### Specmatic's Advanced Semantic Rules ###` section.
+You can review the full list of Specmatic semantic rules in `demo/specmatic-linter.yaml` under the `### Specmatic's Advanced Semantic Rules ###` section.
 
-### Step 3: Customize severity of a given rule
+### Step 3: Customize the severity of a specific rule
 
-Update the `demo/specmatic-linter.yaml` config file, change:
+Update `demo/specmatic-linter.yaml` as follows:
 
 ```yaml
 specmatic/ref-has-siblings: error
@@ -115,7 +115,7 @@ to
 specmatic/ref-has-siblings: warn
 ```
 
-Rerun the same command
+Rerun the same command:
 
 ```bash
 docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -129,7 +129,7 @@ docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --
   }
 ```
 
-As you can see, `errors` reduced from 8 to 7 and `warnings` increased from 21 to 22.
+As expected, the number of `errors` decreases from 8 to 7, while `warnings` increases from 21 to 22.
 
 ### Step 4: Enable configurable rules
 
@@ -139,13 +139,13 @@ Open `demo/specmatic-linter.yaml` and uncomment the block immediately below:
 ### Configurable corporate rules ###
 ```
 
-This would enable the following three rules:
+This enables the following three rules:
 
 - `rule/no-error-param`
 - `rule/parameter-description-required`
 - `rule/force-oidc-auth`
 
-Rerun the same command
+Rerun the same command:
 
 ```bash
 docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -165,9 +165,9 @@ You should now see 3 additional violations (errors) from organization-specific Y
 - requiring every parameter to include a description
 - allowing only OIDC-based security schemes
 
-To understand how these rules are structured, read [configurable-rule-anatomy.md](configurable-rule-anatomy.md).
+To understand how these rules are structured, see [configurable-rule-anatomy.md](configurable-rule-anatomy.md).
 
-### Step 3: Enable custom JS plugin rules
+### Step 5: Enable custom JS plugin rules
 
 In `demo/specmatic-linter.yaml`, uncomment the block below the following section:
 
@@ -175,9 +175,9 @@ In `demo/specmatic-linter.yaml`, uncomment the block below the following section
 ### Custom JS Rules ###
 ```
 
-That will enable:
+This enables:
 
-- the `plugins:` block and the following customer rules
+- the `plugins:` block and the following custom rules
 - `corp-standards/pagination-range`
 - `corp-standards/operation-id-naming`
 
@@ -197,32 +197,32 @@ docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --
 
 You should now see violations that require JavaScript-based evaluation, including:
 
-- a derived `operationId` naming check - WARNING
-- a pagination safety rule that validates `limit + offset` - ERROR
+- a derived `operationId` naming check reported as a warning
+- a pagination safety rule that validates `limit + offset` reported as an error
 
-Custom JS rules are useful when the rule depends on cross-field logic, computed values, or dynamic expectations that the YAML DSL cannot express cleanly.
+Custom JavaScript rules are useful when a rule depends on cross-field logic, computed values, or dynamic expectations that the YAML DSL cannot express cleanly.
 
-For more detail, read [custom-js-rule-anatomy.md](custom-js-rule-anatomy.md).
+For more detail, see [custom-js-rule-anatomy.md](custom-js-rule-anatomy.md).
 
 ## High-Performance Engine
 
-Specmatic Linter is
-* **Architected for Scale**: Processes thousands of specs in seconds.
-* **Designed for Parallel Execution**: Designed to handle massive enterprise workloads.
-* **Precision-engineered**: High-confidence validation with deterministic rules and low-noise results.
-* **CI/CD Ready**: Lightweight execution with detailed reporting.
+Specmatic Linter is designed for demanding validation workloads:
+* **Architected for scale**: Processes thousands of specifications in seconds.
+* **Built for parallel execution**: Handles large enterprise workloads efficiently.
+* **Precision-engineered**: Provides deterministic validation and low-noise output.
+* **CI/CD ready**: Delivers lightweight execution with detailed reporting.
 
 ### Performance Benchmark
 
 `performance/` remains a separate sample for large-scale linting.
 
-#### macOS / Linux:
+#### macOS / Linux
 ```bash
 cd performance
 ./scripts/run-performance-benchmark.sh
 ```
 
-#### Windows:
+#### Windows
 ```bat
 cd performance
 .\scripts\run-performance-benchmark.cmd
@@ -250,15 +250,15 @@ Peak CPU Usage:    754.46%
 📂 Detailed reports saved to: results/
 ```
 
-The benchmark lints 50 large specs and reports timing plus generated result artifacts.
+The benchmark lints 50 large specifications and reports execution time, resource utilization, and generated result artifacts.
 
-You must compare Specmatic Linter's performance (quality/depth of evaluation using out-of-box rules and speed) with your current (soon-to-change) favourite linter.
+For a meaningful evaluation, compare both the depth of validation and the execution speed of Specmatic Linter against your current linting solution.
 
 ## Future Roadmap
-* **Alpha version**: We are in the process of improving Specmatic Linter's architecture to out-perform its own benchmarks.
-* **Support for other Specs**: Currently we only support OpenAPI 3.x version. We'll soon be releasing linting support for AsyncAPI, Arazzo, GraphQL SDL, Protobuf, Open-RPC, MCP, A2A, and more.
-* **Auto-fix**: In the future, you would be able to automatically identify and fix semantic and syntax issues with your specs and examples.
-* **Maturity Level**: Soon you would be able to define maturity levels for your specs and assign badges like Baseline, Bronze, Silver, Gold and Platinum.
-* **Profiles**: Soon you would be able to define profiles with hand-picked rules, so you can decide which linting profile needs to be applied to which type of spec.
-* **Rule Categories**: We are in the process of logically grouping each rule in a category so it is easier to understand violations based on category, but also use it as a filter to only run a given category like security. 
-* **Expand Built-in Ruleset**: Extend the current built in rules with other industry standard rulesets from OWASP, JSONSchema, etc.
+* **Architecture improvements**: Continued investment in the underlying architecture to further improve performance and scalability.
+* **Broader specification support**: Current support focuses on OpenAPI 3.x, with planned linting support for AsyncAPI, Arazzo, GraphQL SDL, Protobuf, Open-RPC, MCP, A2A, and additional formats.
+* **Auto-fix capabilities**: Planned support for automatic remediation of semantic and syntax issues in specifications and examples.
+* **Maturity levels**: Planned support for maturity tiers such as Baseline, Bronze, Silver, Gold, and Platinum.
+* **Profiles**: Planned support for curated rule profiles tailored to different specification types and governance needs.
+* **Rule categorization**: Improved logical grouping of rules to simplify triage and enable category-based execution, such as security-only validation.
+* **Expanded built-in rulesets**: Broader coverage through additional industry-standard rulesets, including OWASP and JSON Schema-aligned validations.
