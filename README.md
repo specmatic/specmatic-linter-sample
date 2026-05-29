@@ -1,6 +1,15 @@
-# Specmatic Linter Sample
+# Specmatic Linter
 
-This sample is organized around one guided walkthrough and one optional performance benchmark.
+This sample project provides you a guided walkthrough of Specmatic Linter's capabilities.
+
+## Why Specmatic Linter?
+* **Semantic Intelligence**: We understand what your API means, not just what it says.
+* **Superior Performance**: High-performance concurrent engine built for enterprise-scale workloads.
+* **Precision-engineered**: High-confidence validation with deterministic rules and low-noise results.
+* **Mission-Critical Reliability**: Production-hardened validation designed for large-scale systems and CI/CD pipelines.
+* **Extensible**: Easy-to-use DSL for defining custom rules and organisation-specific policies.
+* **Auto-Fix**: Automatically identify and fix semantic and syntax issues.
+* **Best-of-Breed Architecture**: Built on proven patterns while addressing the limitations of traditional linting approaches.
 
 ## Prerequisites
 
@@ -30,7 +39,7 @@ docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --
   }
 ```
 
-This first run should catch built-in semantic issues such as:
+This run catches built-in semantic issues such as:
 
 - enum values that contradict the declared schema type
 - numeric bounds that make a value impossible
@@ -39,6 +48,18 @@ This first run should catch built-in semantic issues such as:
 - `$ref` definitions that incorrectly include sibling fields
 - `GET` operations with request bodies
 - security declarations shadowed by conflicting schema properties
+
+Specmatic Linter is capable of catching the following:
+
+| Issue Type                  | Other Linters | Specmatic                            |
+|-----------------------------|---------------|--------------------------------------|
+| Constraint Contradictions   | Valid         | Error (Enum/schema contradiction)    |
+| Regex Incompatibility       | Valid         | Error (Pattern vs Length)            |
+| Boundary Violations         | Valid         | Error (Max < Min)                    |
+| Incomplete Schema Shape     | Valid         | Error (Missing data type for arrays) |
+| HTTP Semantic Conflicts     | Valid         | Error (Get with requestBody)         |
+| Schema Composition Problems | Valid         | Error (Ref has siblings)             |
+| Security Overlaps           | Valid         | Warning (Shadowed Schemes)           |
 
 ### Step 2: Enable configurable rules
 
@@ -117,7 +138,14 @@ Custom JS rules are useful when the rule depends on cross-field logic, computed 
 
 For more detail, read [custom-js-rule-anatomy.md](custom-js-rule-anatomy.md).
 
-## Performance Benchmark
+## High-Performance Engine
+
+Specmatic Linter is
+* **Built for Scale**: Processes thousands of specs in seconds.
+* **Parallel Execution**: Designed to handle massive enterprise workloads.
+* **CI/CD Ready**: Lightweight execution with detailed reporting.
+
+### Performance Benchmark
 
 `performance/` remains a separate sample for large-scale linting.
 
@@ -147,10 +175,10 @@ TOTAL ESTATE              |   102713 |    18041 |      68343
 
 Resource Utilization
 Average CPU Usage: 589.25%
-Peak CPU Usage:    854.46%
+Peak CPU Usage:    754.46%
 
 ✅ SUCCESS: Linted 50 specifications (~12550 paths)
-⏱️  Total Execution Time: 6991ms
+⏱️  Total Execution Time: 3991ms
 
 📂 Detailed reports saved to: results/
 ```
