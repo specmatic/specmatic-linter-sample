@@ -7,38 +7,41 @@ rules:
   specmatic/missing-schema-fallback: error
   specmatic/get-request-body-disallowed: error
 
-  # Uncomment this block to enable configurable corporate rules.
-  # rule/no-error-param:
-  #   severity: error
-  #   subject:
-  #     type: Parameter
-  #     property: name
-  #   assertions:
-  #     pattern: '^(?!error$).*$'
-  #   message: "Architectural violation: Parameter names must not be 'error'."
-  #
-  # rule/parameter-description-required:
-  #   severity: error
-  #   subject:
-  #     type: Parameter
-  #   assertions:
-  #     required:
-  #       - description
-  #   message: "Architectural violation: All parameters must have a description."
-  #
-  # rule/force-oidc-auth:
-  #   severity: error
-  #   subject:
-  #     type: SecurityScheme
-  #     property: type
-  #   assertions:
-  #     const: openIdConnect
-  #   message: "Architectural violation: Only OIDC authentication is permitted."
+  ### Configurable corporate rules ###
 
-  # Uncomment this block after enabling the plugin below.
-  # corp-standards/pagination-range: error
-  # corp-standards/operation-id-naming: warn
+#  rule/no-error-param:
+#    severity: error
+#    subject:
+#      type: Parameter
+#      property: name
+#    assertions:
+#      pattern: '^(?!error$).*$'
+#    message: "Architectural violation: Parameter names must not be 'error'."
+#
+#  rule/parameter-description-required:
+#    severity: error
+#    subject:
+#      type: Parameter
+#    assertions:
+#      required:
+#        - description
+#    message: "Architectural violation: All parameters must have a description."
+#
+#  rule/force-oidc-auth:
+#    severity: error
+#    subject:
+#      type: SecurityScheme
+#      property: type
+#    assertions:
+#      const: openIdConnect
+#    message: "Architectural violation: Only OIDC authentication is permitted."
 
-# Uncomment to enable custom JS plugin rules.
-# plugins:
-#   - ./js-plugin/index.js
+  ### Custom JS Rules ###
+
+#  corp-standards/pagination-range: error
+#  corp-standards/operation-id-naming: warn
+
+  ### Custom JS plugin ###
+
+#plugins:
+# - ./js-plugin/index.js

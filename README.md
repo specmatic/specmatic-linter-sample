@@ -19,7 +19,7 @@ The walkthrough lives in `demo/`:
 From the repository root, run:
 
 ```bash
-docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
 ```terminaloutput
@@ -45,10 +45,10 @@ This first run should catch built-in semantic issues such as:
 Open `demo/specmatic-linter.yaml` and uncomment the block immediately below:
 
 ```yaml
-# Uncomment this block to enable configurable corporate rules.
+### Configurable corporate rules ###
 ```
 
-That means uncommenting these three rules:
+This would enable the following three rules:
 
 - `rule/no-error-param`
 - `rule/parameter-description-required`
@@ -57,12 +57,12 @@ That means uncommenting these three rules:
 Rerun the same command
 
 ```bash
-docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
 ```terminaloutput
   "totals": {
-    "errors": 7,
+    "errors": 9,
     "warnings": 0,
     "ignored": 0
   }
@@ -78,31 +78,31 @@ To understand how these rules are structured, read [configurable-rule-anatomy.md
 
 ### Step 3: Enable custom JS plugin rules
 
-In `demo/specmatic-linter.yaml`, uncomment both of these sections:
+In `demo/specmatic-linter.yaml`, uncomment the blocks below the following sections:
 
 ```yaml
-# Uncomment this block after enabling the plugin below.
+### Custom JS plugin ###
 ```
 
 ```yaml
-# Uncomment to enable custom JS plugin rules.
+### Custom JS Rules ###
 ```
 
-That means uncommenting:
+That will enable:
 
-- the `plugins:` block
+- the `plugins:` block and the following customer rules
 - `corp-standards/pagination-range`
 - `corp-standards/operation-id-naming`
 
 Rerun the same command.
 
 ```bash
-docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
 ```terminaloutput
   "totals": {
-    "errors": 8,
+    "errors": 10,
     "warnings": 1,
     "ignored": 0
   }
@@ -110,8 +110,8 @@ docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --
 
 You should now see violations that require JavaScript-based evaluation, including:
 
-- a derived `operationId` naming check
-- a pagination safety rule that validates `limit + offset`
+- a derived `operationId` naming check - WARNING
+- a pagination safety rule that validates `limit + offset` - ERROR
 
 Custom JS rules are useful when the rule depends on cross-field logic, computed values, or dynamic expectations that the YAML DSL cannot express cleanly.
 
