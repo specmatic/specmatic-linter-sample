@@ -19,7 +19,7 @@ The walkthrough lives in `demo/`:
 From the repository root, run:
 
 ```bash
-docker run --rm -v .:/usr/src/app -w /usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
 ```
 
 This first run should catch built-in semantic issues such as:
