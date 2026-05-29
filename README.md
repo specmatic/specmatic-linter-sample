@@ -10,7 +10,7 @@ This sample is organized around one guided walkthrough and one optional performa
 
 The walkthrough lives in `demo/`:
 
-- `demo/openapi.yaml` contains one spec with intentionally placed violations
+- `demo/openapi.yaml` contains one spec with intentional violations
 - `demo/specmatic-linter.yaml` starts with only semantic rules enabled
 - `demo/js-plugin/` contains the custom JS plugin you enable later in the walkthrough
 
@@ -20,6 +20,14 @@ From the repository root, run:
 
 ```bash
 docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+```
+
+```terminaloutput
+  "totals": {
+    "errors": 6,
+    "warnings": 0,
+    "ignored": 0
+  }
 ```
 
 This first run should catch built-in semantic issues such as:
@@ -46,7 +54,19 @@ That means uncommenting these three rules:
 - `rule/parameter-description-required`
 - `rule/force-oidc-auth`
 
-Rerun the same command.
+Rerun the same command
+
+```bash
+docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+```
+
+```terminaloutput
+  "totals": {
+    "errors": 7,
+    "warnings": 0,
+    "ignored": 0
+  }
+```
 
 You should now see additional violations from organization-specific YAML DSL rules, including:
 
@@ -76,6 +96,18 @@ That means uncommenting:
 
 Rerun the same command.
 
+```bash
+docker run --rm -v .:/usr/src/app specmatic/enterprise lint demo/openapi.yaml --config demo/specmatic-linter.yaml
+```
+
+```terminaloutput
+  "totals": {
+    "errors": 8,
+    "warnings": 1,
+    "ignored": 0
+  }
+```
+
 You should now see violations that require JavaScript-based evaluation, including:
 
 - a derived `operationId` naming check
@@ -99,6 +131,28 @@ Windows:
 ```bat
 cd performance
 .\scripts\run-performance-benchmark.cmd
+```
+
+```terminaloutput
+--- Starting Performance Benchmark (Enterprise Estate) ---
+Note: Detailed results for each spec will be saved to performance/results/
+Specification File        |    Lines |   Errors |   Warnings
+--------------------------+----------+----------+-----------
+spec-1.yaml               |     3409 |      651 |       1902
+...
+...
+spec-50.yaml              |     2167 |      383 |       1384
+--------------------------+----------+----------+-----------
+TOTAL ESTATE              |   102713 |    18041 |      68343
+
+Resource Utilization
+Average CPU Usage: 589.25%
+Peak CPU Usage:    854.46%
+
+✅ SUCCESS: Linted 50 specifications (~12550 paths)
+⏱️  Total Execution Time: 6991ms
+
+📂 Detailed reports saved to: results/
 ```
 
 The benchmark lints 50 large specs and reports timing plus generated result artifacts.
