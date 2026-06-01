@@ -1,0 +1,28 @@
+plugins:
+  - ../js-plugin/index.js
+
+extends:
+  - recommended
+
+categories:
+  - security
+
+rules:
+  no-required-schema-properties-undefined: error
+  specmatic/missing-schema-fallback: error
+
+  rule/parameter-description-required:
+    severity: error
+    category:
+      - governance
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - description
+    message: 'Governance violation: every parameter must declare a description.'
+
+  demo-categories/operation-risk-tier:
+    severity: error
+    category:
+      - governance

@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Rule Categorization Demo
+  version: 1.0.0
+paths:
+  /accounts:
+    get:
+      operationId: listAccounts
+      parameters:
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountList'
+  /reports:
+    post:
+      summary: Create report
+      operationId: createReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReportRequest'
+      responses:
+        '202':
+          description: Accepted
+components:
+  schemas:
+    AccountList:
+      type: array
+    CreateReportRequest:
+      type: object
+      required:
+        - reportId
+      properties:
+        name:
+          type: string
