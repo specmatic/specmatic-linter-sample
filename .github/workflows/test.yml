@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  # TODO - enable once enterprise changes are out
+  # push:
+  # pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-readme-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify Docker is available
+        run: docker --version
+
+      - name: Run README lab verifier
+        env:
+          CENTRAL_CONFIG_REPO_TOKEN: ${{ secrets.CENTRAL_CONFIG_REPO_TOKEN }}
+        run: python .github/scripts/verify_readme_lab.py
