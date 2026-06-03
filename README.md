@@ -374,6 +374,29 @@ Locally, you keep only the spec. The rule config lives in a central git repo, an
 This walkthrough uses the public repo:
 - [specmatic/central-linter-config.git](https://github.com/specmatic/central-linter-config.git)
 
+### Step 1: Run with default profile 
+
+```bash
+docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
+  --config-repo-url=https://github.com/specmatic/central-linter-config.git 
+```
+
+```terminaloutput
+"totals": {
+  "errors": 2,
+  "warnings": 9,
+  "ignored": 0
+}
+```
+
+If your specmatic linter config file `specmatic-linter.yaml` is not at the top level, then you need to pass the path to the file like this:
+
+```bash
+docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
+  --config-repo-url=https://github.com/specmatic/central-linter-config.git \
+  --config=specmatic-linter.yaml
+```
+
 If your central config repo is private, set:
 
 ```bash
@@ -382,12 +405,11 @@ export CENTRAL_CONFIG_REPO_TOKEN=<your-pat>
 
 The PAT should have access to that private repo.
 
-### Step 1: Run With `internal-api`
+### Step 2: Run with `internal-api` profile
 
 ```bash
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
   --config-repo-url=https://github.com/specmatic/central-linter-config.git \
-  --config=specmatic-linter.yaml \
   --profile=internal-api
 ```
 
@@ -399,57 +421,11 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 }
 ```
 
-### Step 2: Change Only The Profile
-
-Run the same command, but change only:
-
-```text
---profile=public-api
-```
-
-```bash
-docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
-  --config-repo-url=https://github.com/specmatic/central-linter-config.git \
-  --config=configs/specmatic-linter.yaml \
-  --profile=public-api
-```
-
-```terminaloutput
-"totals": {
-  "errors": 7,
-  "warnings": 10,
-  "ignored": 0
-}
-```
-
-### Step 3: Change Only The Profile Again
-
-Now change only:
-
-```text
---profile=payment-api
-```
-
-```bash
-docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
-  --config-repo-url=https://github.com/specmatic/central-linter-config.git \
-  --config=configs/specmatic-linter.yaml \
-  --profile=payment-api
-```
-
-```terminaloutput
-"totals": {
-  "errors": 9,
-  "warnings": 9,
-  "ignored": 0
-}
-```
-
-This is the value of the central config repo flow:
+### Value of the central config repo flow:
 - no local rule file
 - no rule tuning by every team
 - only profile selection changes locally
-- the central platform team owns the governance logic
+- the central platform or API governance team owns the linting rules
 - one place to manage rules, profiles, severities, and maturity gates
 - simpler org-wide rollout of new standards
 - consistent behavior across local development and CI
