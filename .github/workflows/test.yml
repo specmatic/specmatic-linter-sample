@@ -1,9 +1,8 @@
 name: Test
 
 on:
-  # TODO - enable once enterprise changes are out
-  # push:
-  # pull_request:
+  push:
+  pull_request:
   workflow_dispatch:
 
 jobs:
