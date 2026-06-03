@@ -22,10 +22,10 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
 - `demo/central-config-repo/`
 - `performance/`
 
-Start at the top and go step by step. Each section below tells you:
+Start at the top and go step by step. Each section below explains:
 - which files to inspect
 - what to edit
-- what command to run
+- which command to run
 - what output to expect
 
 ## 1. Rules Intro
@@ -35,10 +35,6 @@ This demo introduces the three kinds of rules:
 - configurable YAML rules
 - custom JS rules
 
-Supporting references:
-- [demo/rules-intro/configurable-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/configurable-rule-anatomy.md)
-- [demo/rules-intro/custom-js-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/custom-js-rule-anatomy.md)
-
 ### Step 1: Run Built-in Rules
 
 ```bash
@@ -46,18 +42,21 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 7,
-  "warnings": 22,
-  "ignored": 0
-}
+  "totals": {
+    "errors": 7,
+    "warnings": 22,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "non_compliant"
+  }
 ```
 
 At this point only built-in rules are active.
 
 ### Step 2: Enable Configurable Rules
 
-Open [demo/rules-intro/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/specmatic-linter.yaml) and uncomment the `include:` block under the `Step 2` comment.
+Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and uncomment the `include:` block under the `Step 2` comment.
 
 Run the same command again:
 
@@ -66,18 +65,26 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 10,
-  "warnings": 22,
-  "ignored": 0
-}
+  "totals": {
+    "errors": 10,
+    "warnings": 22,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "non_compliant"
+  }
 ```
 
-You have now enabled configurable YAML rules from the root rule inventory.
+You have now enabled configurable YAML rules, which has resulted in 3 more errors.
+
+Supporting references:
+- [demo/rules-intro/configurable-rule-anatomy.md](demo/rules-intro/configurable-rule-anatomy.md)
 
 ### Step 3: Enable Custom JS Rules
 
-In the same `include:` list, add:
+Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and uncomment the block under the `Step 3` comment.
+
+This will add the following 2 more custom JS rules:
 - `corp-standards/pagination-range`
 - `corp-standards/operation-id-naming`
 
@@ -88,14 +95,20 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 11,
-  "warnings": 23,
-  "ignored": 0
-}
+  "totals": {
+    "errors": 11,
+    "warnings": 23,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "non_compliant"
+  }
 ```
 
-Those new findings come from JavaScript logic rather than the YAML rule DSL.
+Those new findings (1 error and 1 warning) have come from JavaScript logic rather than the YAML rule DSL.
+
+Supporting references:
+- [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md)
 
 ## 2. Maturity
 
@@ -119,7 +132,7 @@ The overall maturity is `baseline` because the first failing participating rule 
 
 ### Step 2: Raise One Rule's Maturity Tier
 
-In [demo/maturity/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/maturity/specmatic-linter.yaml), change:
+In [demo/maturity/specmatic-linter.yaml](demo/maturity/specmatic-linter.yaml), change:
 
 ```yaml
 maturity: bronze
@@ -199,7 +212,7 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 
 ### Step 2: Switch To `examples`
 
-In [demo/rule-types/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rule-types/specmatic-linter.yaml), replace:
+In [demo/rule-types/specmatic-linter.yaml](demo/rule-types/specmatic-linter.yaml), replace:
 
 ```yaml
 types:
@@ -296,7 +309,7 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 
 ### Step 4: Tweak A Profile
 
-In [demo/profiles/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/profiles/specmatic-linter.yaml), change this inside `internal`:
+In [demo/profiles/specmatic-linter.yaml](demo/profiles/specmatic-linter.yaml), change this inside `internal`:
 
 ```yaml
 operation-summary: warn

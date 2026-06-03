@@ -52,12 +52,13 @@ profiles:
         specmatic/security-property-redefined: error
         specmatic/missing-schema-fallback: error
         specmatic/get-request-body-disallowed: error
-      # Step 2: uncomment these configurable rules.
-      # include:
-      #   - rule/no-error-param
-      #   - rule/parameter-description-required
-      #   - rule/force-oidc-auth
-      #
-      # Step 3: after Step 2, add these JS rules under the same include list.
-      #   - corp-standards/pagination-range
-      #   - corp-standards/operation-id-naming
+
+      ### Step 2: uncomment to add these configurable rules. ###
+#      include:
+#        - rule/no-error-param
+#        - rule/parameter-description-required
+#        - rule/force-oidc-auth
+
+      ### Step 3: uncomment to add these custom JS rules. ###
+#        - corp-standards/pagination-range
+#        - corp-standards/operation-id-naming
