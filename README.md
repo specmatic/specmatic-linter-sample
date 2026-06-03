@@ -224,7 +224,7 @@ Built-in rule types:
 - `parameters`
 - `metadata`
 
-### Step 1: Run With `schema` + `parameters`
+### Step 1: Run all rules
 
 ```bash
 docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -232,27 +232,19 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 
 ```terminaloutput
 "totals": {
-  "errors": 5,
-  "warnings": 1,
+  "errors": 9,
+  "warnings": 12,
   "ignored": 0
 }
 ```
 
-### Step 2: Switch To `examples`
+### Step 2: Run rules only of type `examples`
 
-In [demo/rule-types/specmatic-linter.yaml](demo/rule-types/specmatic-linter.yaml), replace:
-
-```yaml
-types:
-  - schema
-  - parameters
-```
-
-with:
+In [demo/rule-types/specmatic-linter.yaml](demo/rule-types/specmatic-linter.yaml), uncomment:
 
 ```yaml
-types:
-  - examples
+    types:
+      - examples
 ```
 
 Run the same command again:
@@ -269,9 +261,23 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 }
 ```
 
-### Step 3: Remove Type Filtering Entirely
+### Step 3: Run rules of type `examples` or `schema`
 
-Delete the whole `types:` block and run the same command again:
+In [demo/rule-types/specmatic-linter.yaml](demo/rule-types/specmatic-linter.yaml), update:
+
+```yaml
+    types:
+      - examples
+``` 
+with
+
+```yaml
+    types:
+      - examples
+      - schema
+``` 
+
+Run the same command again:
 
 ```bash
 docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -279,19 +285,15 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 
 ```terminaloutput
 "totals": {
-  "errors": 9,
-  "warnings": 12,
+  "errors": 5,
+  "warnings": 2,
   "ignored": 0
 }
 ```
 
-Now you get the full mix again. Try `security` or `operations` on your own and see how the output changes.
-
 ## 4. Profiles
 
-This is the first demo that introduces `--profile`.
-
-Profiles let different teams share the same rule inventory while adopting different governance levels.
+Profiles let different teams share the same rule catalogue while adopting different governance levels.
 
 ### Step 1: Run The `internal` Profile
 
@@ -373,7 +375,7 @@ The PAT should have access to that private repo.
 ```bash
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
   --config-repo-url=https://github.com/specmatic/central-linter-config.git \
-  --config=configs/specmatic-linter.yaml \
+  --config=specmatic-linter.yaml \
   --profile=internal-api
 ```
 

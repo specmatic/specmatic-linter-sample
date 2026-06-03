@@ -11,9 +11,8 @@ rules:
 
 profiles:
   default:
-    types:
-      - schema
-      - parameters
+#    types:
+#      - examples
     rules:
       extends:
         - recommended
