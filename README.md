@@ -2,12 +2,35 @@
 
 This sample project is a guided, hands-on lab for learning Specmatic Linter in the following order:
 
-1. rules intro
-2. maturity
-3. rule types
-4. profiles
-5. central config repo
-6. performance
+<!-- TOC -->
+* [Specmatic Linter Interactive Lab](#specmatic-linter-interactive-lab)
+  * [Prerequisites](#prerequisites)
+  * [Folder Layout](#folder-layout)
+  * [1. Rules Intro](#1-rules-intro)
+    * [Step 1: Run Built-in Rules](#step-1-run-built-in-rules)
+    * [Step 2: Enable Configurable Rules](#step-2-enable-configurable-rules)
+    * [Step 3: Enable Custom JS Rules](#step-3-enable-custom-js-rules)
+  * [2. Maturity Levels](#2-maturity-levels)
+    * [Step 1: Run the Initial Setup](#step-1-run-the-initial-setup)
+    * [Step 2: Raise One Rule's Maturity Level](#step-2-raise-one-rules-maturity-level)
+    * [Step 3: Remove One Rule From Maturity Participation](#step-3-remove-one-rule-from-maturity-participation)
+  * [3. Rule Types](#3-rule-types)
+    * [Step 1: Run All Rules](#step-1-run-all-rules)
+    * [Step 2: Run rules only of type `examples`](#step-2-run-rules-only-of-type-examples)
+    * [Step 3: Run rules of type `examples` or `schema`](#step-3-run-rules-of-type-examples-or-schema)
+  * [4. Profiles](#4-profiles)
+    * [Step 1: Run Without Any Profile](#step-1-run-without-any-profile)
+    * [Step 2: Run the `internal` Profile](#step-2-run-the-internal-profile)
+    * [Step 3: Run the `public-api` Profile](#step-3-run-the-public-api-profile)
+    * [Step 4: Tweak A Profile](#step-4-tweak-a-profile)
+  * [5. Central Config Repo](#5-central-config-repo)
+    * [Step 1: Run with the Default Profile](#step-1-run-with-the-default-profile)
+    * [Step 2: Run with `internal-api` profile](#step-2-run-with-internal-api-profile)
+    * [Why the Central Config Repo Flow Helps](#why-the-central-config-repo-flow-helps)
+  * [6. Performance](#6-performance)
+      * [macOS / Linux](#macos--linux)
+      * [Windows](#windows)
+<!-- TOC -->
 
 ## Prerequisites
 
