@@ -1,0 +1,58 @@
+rules:
+  rule/parameter-description-required:
+    severity: error
+    type: parameters
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - description
+    message: Every parameter must declare a description.
+
+  rule/security-scheme-modern:
+    severity: error
+    type: security
+    subject:
+      type: SecurityScheme
+      property: type
+    assertions:
+      enum:
+        - oauth2
+        - openIdConnect
+    message: Only OAuth2 or OpenID Connect schemes are allowed.
+
+profiles:
+  internal:
+    rules:
+      extends:
+        - recommended
+      include:
+        - rule/parameter-description-required
+      override:
+        operation-summary: warn
+        info-contact: off
+        info-license: off
+
+  public-api:
+    rules:
+      extends:
+        - recommended
+      include:
+        - rule/parameter-description-required
+        - rule/security-scheme-modern
+      override:
+        operation-summary: error
+        info-contact: error
+        info-license: error
+
+  payment-api:
+    extends:
+      - public-api
+    rules:
+      override:
+        operation-summary:
+          severity: error
+          maturity: bronze
+        operation-4xx-problem-details-rfc7807:
+          severity: error
+          maturity: gold

@@ -41,20 +41,7 @@ rules:
     type: operations
 
 profiles:
-  minimal-semantic:
-    rules:
-      extends:
-        - minimal
-      include:
-        - no-enum-type-mismatch
-        - specmatic/invalid-numeric-bounds
-        - specmatic/pattern-length-incompatible
-        - specmatic/security-property-redefined
-        - specmatic/ref-has-siblings
-        - specmatic/missing-schema-fallback
-        - specmatic/get-request-body-disallowed
-
-  recommended-semantic:
+  default:
     rules:
       extends:
         - recommended
@@ -65,22 +52,12 @@ profiles:
         specmatic/security-property-redefined: error
         specmatic/missing-schema-fallback: error
         specmatic/get-request-body-disallowed: error
-
-  configurable-rules:
-    rules:
-      extends:
-        - recommended
-      include:
-        - rule/no-error-param
-        - rule/parameter-description-required
-        - rule/force-oidc-auth
-      override:
-        specmatic/ref-has-siblings: warn
-
-  js-rules:
-    rules:
-      extends:
-        - recommended
-      include:
-        - corp-standards/pagination-range
-        - corp-standards/operation-id-naming
+      # Step 2: uncomment these configurable rules.
+      # include:
+      #   - rule/no-error-param
+      #   - rule/parameter-description-required
+      #   - rule/force-oidc-auth
+      #
+      # Step 3: after Step 2, add these JS rules under the same include list.
+      #   - corp-standards/pagination-range
+      #   - corp-standards/operation-id-naming

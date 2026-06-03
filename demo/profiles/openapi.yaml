@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Profiles demo
+  version: 1.0.0
+paths:
+  /payments:
+    get:
+      parameters:
+        - name: reportId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: bad request
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+servers:
+  - url: https://api.example.com

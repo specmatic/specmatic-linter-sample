@@ -1,5 +1,5 @@
 profiles:
-  maturity-lint:
+  default:
     rules:
       include:
         - operation-summary

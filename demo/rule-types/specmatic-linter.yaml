@@ -10,36 +10,17 @@ rules:
     message: Every parameter must declare a description.
 
 profiles:
-  schema-only:
+  default:
     types:
       - schema
-    rules:
-      extends:
-        - recommended
-
-  examples-only:
-    types:
-      - examples
-    rules:
-      extends:
-        - recommended
-
-  custom-parameters-only:
-    types:
       - parameters
     rules:
       extends:
-        - minimal
+        - recommended
       include:
         - rule/parameter-description-required
-
-  metadata-override:
-    types:
-      - metadata
-    rules:
-      extends:
-        - recommended
       override:
-        operation-summary:
-          severity: warn
-          type: metadata
+        no-invalid-schema-examples: error
+        no-enum-type-mismatch: error
+        specmatic/missing-schema-fallback: error
+        specmatic/invalid-numeric-bounds: error

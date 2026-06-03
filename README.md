@@ -1,107 +1,406 @@
-# Specmatic Linter Sample
+# Specmatic Linter Interactive Lab
 
-This sample project shows the current profile-centric config model in a few small demos.
+This sample project is a guided, hands-on lab for learning Specmatic Linter in this order:
 
-## Demos
+1. basic ruleset intro
+2. maturity
+3. rule types
+4. profiles
+5. central config repo
+6. performance
 
-### 1. Main walkthrough
+## Prerequisites
 
-`demo/` shows built-in, configurable, and JS plugin rules with profiles.
+- Docker Engine must be running.
+
+## Folder Layout
+
+- `demo/rules-intro/`
+- `demo/maturity/`
+- `demo/rule-types/`
+- `demo/profiles/`
+- `demo/central-config-repo/`
+- `performance/`
+
+Start at the top and go step by step. Each section below tells you:
+- which files to inspect
+- what to edit
+- what command to run
+- what output to expect
+
+## 1. Rules Intro
+
+This demo introduces the three kinds of rules:
+- built-in rules
+- configurable YAML rules
+- custom JS rules
+
+Supporting references:
+- [demo/rules-intro/configurable-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/configurable-rule-anatomy.md)
+- [demo/rules-intro/custom-js-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/custom-js-rule-anatomy.md)
+
+### Step 1: Run Built-in Rules
 
 ```bash
-docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile minimal-semantic
+docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
-```bash
-docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile recommended-semantic
+```terminaloutput
+"totals": {
+  "errors": 7,
+  "warnings": 22,
+  "ignored": 0
+}
 ```
 
+At this point only built-in rules are active.
+
+### Step 2: Enable Configurable Rules
+
+Open [demo/rules-intro/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rules-intro/specmatic-linter.yaml) and uncomment the `include:` block under the `Step 2` comment.
+
+Run the same command again:
+
 ```bash
-docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile configurable-rules
+docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
-```bash
-docker run --rm -v ./demo:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile js-rules
+```terminaloutput
+"totals": {
+  "errors": 10,
+  "warnings": 22,
+  "ignored": 0
+}
 ```
 
-### 2. Rule typing
+You have now enabled configurable YAML rules from the root rule inventory.
 
-`rule-typing/` shows profile-level `types` filtering.
+### Step 3: Enable Custom JS Rules
+
+In the same `include:` list, add:
+- `corp-standards/pagination-range`
+- `corp-standards/operation-id-naming`
+
+Run the same command again:
 
 ```bash
-docker run --rm -v ./rule-typing:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile schema-only
+docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
-```bash
-docker run --rm -v ./rule-typing:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile examples-only
+```terminaloutput
+"totals": {
+  "errors": 11,
+  "warnings": 23,
+  "ignored": 0
+}
 ```
 
+Those new findings come from JavaScript logic rather than the YAML rule DSL.
+
+## 2. Maturity
+
+This demo shows:
+- maturity is configured per rule
+- overall maturity is computed from failing error-level rules
+
+### Step 1: Run The Initial Setup
+
 ```bash
-docker run --rm -v ./rule-typing:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile custom-parameters-only
+docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
 ```
 
-```bash
-docker run --rm -v ./rule-typing:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile metadata-override
+```terminaloutput
+"maturity": {
+  "level": "baseline"
+}
 ```
 
-What each highlights:
-- `schema-only`: invalid bounds, mixed enum types, missing `items`
-- `examples-only`: invalid example values
-- `custom-parameters-only`: a configurable rule from the root inventory typed as `parameters`
-- `metadata-override`: built-in `operation-summary` retyped from its default bucket into `metadata`
+The overall maturity is `baseline` because the first failing participating rule is `operation-summary`, and it currently requires `bronze`.
 
-### 3. Maturity
+### Step 2: Raise One Rule's Maturity Tier
 
-`maturity/` shows maturity reporting with a small rule set.
+In [demo/maturity/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/maturity/specmatic-linter.yaml), change:
 
-```bash
-docker run --rm -v ./maturity:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile maturity-lint
+```yaml
+maturity: bronze
 ```
 
-The profile makes `operation-summary` a `bronze` error and `info-license` a `gold` error. This sample should report maturity as `baseline` because it fails the `bronze` requirement.
+to:
 
-### 4. Central config repo
-
-`central-config-demo/` showcases how a central governance team can maintain API linter rules in a dedicated repository, allowing development teams to simply choose a "profile" (e.g., `public-api`, `internal-api`) without having to manage the rules themselves.
-
-#### Try Different Profiles
-
-Each profile below applies different rules to its corresponding spec from a central repository.
-
-**1. Public API Profile**
-Strict rules for external-facing APIs (requires contact, license, summaries, and OAuth2).
-```bash
-docker run --rm -v "./central-config-demo:/usr/src/app" -e CENTRAL_CONFIG_REPO_TOKEN=$PAT specmatic/enterprise lint public-api.yaml \
-  --config-repo-url=https://github.com/specmatic/central-linter-config.git \
-  --config=configs/specmatic-linter.yaml \
-  --profile=public-api
+```yaml
+maturity: silver
 ```
 
-**2. Internal API Profile**
-Relaxed rules for internal services (e.g., contact/license optional, warns on legacy headers).
+Run the same command again:
+
 ```bash
-docker run --rm -v "./central-config-demo:/usr/src/app" -e CENTRAL_CONFIG_REPO_TOKEN=$PAT specmatic/enterprise lint internal-api.yaml \
+docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"maturity": {
+  "level": "bronze"
+}
+```
+
+### Step 3: Remove One Rule From Maturity Participation
+
+Change `operation-summary` from:
+
+```yaml
+severity: error
+```
+
+to:
+
+```yaml
+severity: warn
+```
+
+Run the same command again:
+
+```bash
+docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"maturity": {
+  "level": "silver"
+}
+```
+
+The rule still fails, but it no longer participates in maturity because it is now only a warning and maturity is computed only from rules with error severity.
+
+## 3. Rule Types
+
+This demo shows how `types` lets you filter rules.
+
+Supported rule types:
+- `security`
+- `schema`
+- `examples`
+- `operations`
+- `parameters`
+- `metadata`
+
+### Step 1: Run With `schema` + `parameters`
+
+```bash
+docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"totals": {
+  "errors": 5,
+  "warnings": 1,
+  "ignored": 0
+}
+```
+
+### Step 2: Switch To `examples`
+
+In [demo/rule-types/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/rule-types/specmatic-linter.yaml), replace:
+
+```yaml
+types:
+  - schema
+  - parameters
+```
+
+with:
+
+```yaml
+types:
+  - examples
+```
+
+Run the same command again:
+
+```bash
+docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"totals": {
+  "errors": 1,
+  "warnings": 2,
+  "ignored": 0
+}
+```
+
+### Step 3: Remove Type Filtering Entirely
+
+Delete the whole `types:` block and run the same command again:
+
+```bash
+docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"totals": {
+  "errors": 9,
+  "warnings": 12,
+  "ignored": 0
+}
+```
+
+Now you get the full mix again. Try `security` or `operations` on your own and see how the output changes.
+
+## 4. Profiles
+
+This is the first demo that introduces `--profile`.
+
+Profiles let different teams share the same rule inventory while adopting different governance levels.
+
+### Step 1: Run The `internal` Profile
+
+```bash
+docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile internal
+```
+
+```terminaloutput
+"totals": {
+  "errors": 2,
+  "warnings": 7,
+  "ignored": 2
+}
+```
+
+### Step 2: Run The `public-api` Profile
+
+```bash
+docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile public-api
+```
+
+```terminaloutput
+"totals": {
+  "errors": 6,
+  "warnings": 6,
+  "ignored": 0
+}
+```
+
+### Step 3: Run The `payment-api` Profile
+
+```bash
+docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile payment-api
+```
+
+```terminaloutput
+"totals": {
+  "errors": 7,
+  "warnings": 5,
+  "ignored": 0
+}
+```
+
+### Step 4: Tweak A Profile
+
+In [demo/profiles/specmatic-linter.yaml](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/demo/profiles/specmatic-linter.yaml), change this inside `internal`:
+
+```yaml
+operation-summary: warn
+```
+
+to:
+
+```yaml
+operation-summary: error
+```
+
+Rerun the `internal` command and observe that the same spec now fails more strictly without changing the spec itself.
+
+## 5. Central Config Repo
+
+This demo shows the central governance model.
+
+Locally, you keep only the spec. The rule config lives in a central git repo, and the only thing you switch is `--profile`.
+
+This walkthrough uses the public repo:
+- [specmatic/central-linter-config.git](https://github.com/specmatic/central-linter-config.git)
+
+If your central config repo is private, set:
+
+```bash
+export CENTRAL_CONFIG_REPO_TOKEN=<your-pat>
+```
+
+The PAT should have access to that private repo.
+
+### Step 1: Run With `internal-api`
+
+```bash
+docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
   --config-repo-url=https://github.com/specmatic/central-linter-config.git \
   --config=configs/specmatic-linter.yaml \
   --profile=internal-api
 ```
 
-**3. Payment API Profile**
-The most stringent profile, extending `public-api` with additional checks for pagination and error formats.
+```terminaloutput
+"totals": {
+  "errors": 6,
+  "warnings": 7,
+  "ignored": 2
+}
+```
+
+### Step 2: Change Only The Profile
+
+Run the same command, but change only:
+
+```text
+--profile=public-api
+```
+
 ```bash
-docker run --rm -v "./central-config-demo:/usr/src/app" -e CENTRAL_CONFIG_REPO_TOKEN=$PAT specmatic/enterprise lint payment-api.yaml \
+docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
+  --config-repo-url=https://github.com/specmatic/central-linter-config.git \
+  --config=configs/specmatic-linter.yaml \
+  --profile=public-api
+```
+
+```terminaloutput
+"totals": {
+  "errors": 7,
+  "warnings": 10,
+  "ignored": 0
+}
+```
+
+### Step 3: Change Only The Profile Again
+
+Now change only:
+
+```text
+--profile=payment-api
+```
+
+```bash
+docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
   --config-repo-url=https://github.com/specmatic/central-linter-config.git \
   --config=configs/specmatic-linter.yaml \
   --profile=payment-api
 ```
 
-**Benefits:**
-- **No Local Config:** Dev teams don't need local rule files.
-- **Consistency:** All APIs across the company follow the same standards.
-- **Easy Upgrades:** Central updates are automatically applied to all teams on their next run.
-- **Profile-based Governance:** Teams subscribe to a profile that fits their API's maturity or type.
+```terminaloutput
+"totals": {
+  "errors": 9,
+  "warnings": 9,
+  "ignored": 0
+}
+```
 
-### 5. Performance
+This is the value of the central config repo flow:
+- no local rule file
+- no rule tuning by every team
+- only profile selection changes locally
+- the central platform team owns the governance logic
+- one place to manage rules, profiles, severities, and maturity gates
+- simpler org-wide rollout of new standards
+- consistent behavior across local development and CI
+- easier auditing because governance changes are versioned in one repo
+
+## 6. Performance
 
 `performance/` remains the large benchmark sample.
 
@@ -116,11 +415,3 @@ cd performance
 cd performance
 .\scripts\run-performance-benchmark.cmd
 ```
-
-## Notes
-
-- `plugins` live only at the root.
-- Root `rules` are the reusable inventory for configurable and JS rules.
-- Profiles select behavior with profile `extends`, `types`, and `rules.extends` / `rules.include` / `rules.exclude` / `rules.override`.
-
-See [configurable-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/configurable-rule-anatomy.md) and [custom-js-rule-anatomy.md](/Users/yogeshanandanikam/project/sample_projects/specmatic-linter-sample/custom-js-rule-anatomy.md) for the rule shapes used in the main demo.

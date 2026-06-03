@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Central config repo demo
+  version: 1.0.0
+paths:
+  /payments:
+    get:
+      operationId: list_payments
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 600
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 500
+        - name: query
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: bad request
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+servers:
+  - url: https://api.example.com
