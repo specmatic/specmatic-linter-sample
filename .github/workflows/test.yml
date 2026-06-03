@@ -8,21 +8,22 @@ on:
 jobs:
   verify-readme-lab:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Verify Docker is available
         run: docker --version
 
-      - name: Run README lab verifier
+      - name: Run linter
         env:
           CENTRAL_CONFIG_REPO_TOKEN: ${{ secrets.CENTRAL_CONFIG_REPO_TOKEN }}
-        run: python .github/scripts/verify_readme_lab.py
+        run: |
+          docker run --rm -e CENTRAL_CONFIG_REPO_TOKEN \
+          -v "./demo/central-config-repo:/usr/src/app" \
+          specmatic/enterprise lint openapi.yaml \
+          --config-repo-url=https://github.com/specmatic/central-linter-config.git \
+          --config=specmatic-linter.yaml \
+          --profile=public-api
