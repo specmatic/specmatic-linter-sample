@@ -1,8 +1,8 @@
 # Specmatic Linter Interactive Lab
 
-This sample project is a guided, hands-on lab for learning Specmatic Linter in this order:
+This sample project is a guided, hands-on lab for learning Specmatic Linter in the following order:
 
-1. basic ruleset intro
+1. rules intro
 2. maturity
 3. rule types
 4. profiles
@@ -22,7 +22,7 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
 - `demo/central-config-repo/`
 - `performance/`
 
-Start at the top and go step by step. Each section below explains:
+Start at the top and work through the lab step by step. Each section below explains:
 - which files to inspect
 - what to edit
 - which command to run
@@ -75,7 +75,7 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
   }
 ```
 
-You have now enabled configurable YAML rules, which has resulted in 3 more errors.
+You have now enabled configurable YAML rules, which results in 3 additional errors.
 
 Supporting references:
 - [demo/rules-intro/configurable-rule-anatomy.md](demo/rules-intro/configurable-rule-anatomy.md)
@@ -84,7 +84,7 @@ Supporting references:
 
 Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and uncomment the block under the `Step 3` comment.
 
-This will add the following 2 more custom JS rules:
+This adds 2 more custom JS rules:
 - `corp-standards/pagination-range`
 - `corp-standards/operation-id-naming`
 
@@ -105,25 +105,25 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
   }
 ```
 
-Those new findings (1 error and 1 warning) have come from JavaScript logic rather than the YAML rule DSL.
+Those new findings (1 error and 1 warning) come from JavaScript logic rather than from the YAML rule DSL.
 
 Supporting references:
 - [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md)
 
-## 2. Maturity levels
+## 2. Maturity Levels
 
 This demo shows:
 - maturity is configured per rule
 - overall maturity is computed from failing error-level rules
-- Maturity has the following hierarchy:
+- maturity uses the following hierarchy:
   - Non Compliant
   - Baseline
   - Bronze
   - Silver
-  - Gold 
+  - Gold
   - Platinum
 
-### Step 1: Run The Initial Setup
+### Step 1: Run the Initial Setup
 
 ```bash
 docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -141,10 +141,10 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 There are 2 errors reported here:
-- `info-license` which is at `Gold level`
-- `operation-summary` which is at `Bronze level`
+- `info-license`, which is at the `Gold` level
+- `operation-summary`, which is at the `Bronze` level
 
-Since a rule at the Bronze level failed, the maturity is set to `baseline` which is has all passing rules.
+Since a rule at the bronze level failed, the maturity is set to `baseline`, the highest level at which all rules are passing.
 
 ### Step 2: Raise One Rule's Maturity Level
 
@@ -177,7 +177,7 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
   }
 ```
 
-Now you see the same 2 rules have failed, but since we bumped up the maturity level of the failing rule, the overall spec's linting maturity has moved up to `bronze`.
+The same 2 rules still fail, but because the failing rule now has a higher maturity level, the overall spec maturity moves up to `bronze`.
 
 ### Step 3: Remove One Rule From Maturity Participation
 
@@ -210,7 +210,7 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
   }
 ```
 
-Since the `operation-summary` rule is no longer reporting an error (instead it is reporting a warning), it does not participate in the maturity computation. Only rule with severity error participate in maturity computation.
+Since `operation-summary` no longer reports an error as it now reports a warning, it no longer participates in the maturity computation. Only rules with severity `error` participate.
 
 ## 3. Rule Types
 
@@ -224,7 +224,7 @@ Built-in rule types:
 - `parameters`
 - `metadata`
 
-### Step 1: Run all rules
+### Step 1: Run All Rules
 
 ```bash
 docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -293,9 +293,9 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 
 ## 4. Profiles
 
-Not every API needs the same level of linting rigor. Using profiles teams can share the same rule catalogue while adapting governance levels based on API type.
+Not every API needs the same level of linting rigor. Using profiles, teams can share the same rule catalog while adapting governance levels to the API type.
 
-### Step 1: Run without any Profile
+### Step 1: Run Without Any Profile
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -309,7 +309,7 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 }
 ```
 
-### Step 2: Run The `internal` Profile
+### Step 2: Run the `internal` Profile
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile internal
@@ -323,7 +323,7 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 }
 ```
 
-### Step 3: Run The `public-api` Profile
+### Step 3: Run the `public-api` Profile
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile public-api
@@ -351,7 +351,7 @@ to:
 operation-summary: warn
 ```
 
-Rerun the `public-api` command 
+Rerun the `public-api` command:
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile public-api
@@ -369,12 +369,12 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 
 This demo shows the central governance model.
 
-Locally, you keep only the spec. The rule config lives in a central git repo, and the only thing you switch is `--profile`.
+Locally, you keep only the spec. The rule config lives in a central Git repository, and the only thing you change is `--profile`.
 
 This walkthrough uses the public repo:
 - [specmatic/central-linter-config.git](https://github.com/specmatic/central-linter-config.git)
 
-### Step 1: Run with default profile 
+### Step 1: Run with the Default Profile
 
 ```bash
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
@@ -389,7 +389,7 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 }
 ```
 
-If your specmatic linter config file `specmatic-linter.yaml` is not at the top level, then you need to pass the path to the file like this:
+If your Specmatic linter config file, `specmatic-linter.yaml`, is not at the top level, pass its path like this:
 
 ```bash
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
@@ -421,15 +421,15 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 }
 ```
 
-### Value of the central config repo flow:
+### Why the Central Config Repo Flow Helps
 - no local rule file
-- no rule tuning by every team
+- avoid duplication - each team does not need to tune and maintain rules
 - only profile selection changes locally
 - the central platform or API governance team owns the linting rules
 - one place to manage rules, profiles, severities, and maturity gates
 - simpler org-wide rollout of new standards
 - consistent behavior across local development and CI
-- easier auditing because governance changes are versioned in one repo
+- easier auditing because governance changes are versioned in one repository
 
 ## 6. Performance
 
