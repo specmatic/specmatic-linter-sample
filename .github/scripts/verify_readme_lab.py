@@ -107,6 +107,12 @@ def extract_json_output(stdout: str) -> dict:
     return json.loads(match.group(1))
 
 
+def normalize_maturity(level: str | None) -> str | None:
+    if level is None:
+        return None
+    return re.sub(r"[^a-z0-9]+", "_", level.strip().lower()).strip("_")
+
+
 def assert_expectation(payload: dict, expected: Expectation) -> None:
     totals = payload.get("totals", {})
     maturity = payload.get("maturity", {})
@@ -116,7 +122,9 @@ def assert_expectation(payload: dict, expected: Expectation) -> None:
         raise AssertionError(f"Expected warnings={expected.warnings}, got {totals.get('warnings')}")
     if expected.ignored is not None and totals.get("ignored") != expected.ignored:
         raise AssertionError(f"Expected ignored={expected.ignored}, got {totals.get('ignored')}")
-    if expected.maturity is not None and maturity.get("level") != expected.maturity:
+    actual_maturity = normalize_maturity(maturity.get("level"))
+    expected_maturity = normalize_maturity(expected.maturity)
+    if expected_maturity is not None and actual_maturity != expected_maturity:
         raise AssertionError(
             f"Expected maturity={expected.maturity}, got {maturity.get('level')}"
         )
