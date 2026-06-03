@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Rule typing showcase
+  version: 1.0.0
+paths:
+  /reports:
+    get:
+      parameters:
+        - name: reportId
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportFilter'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+servers:
+  - url: https://api.example.com
+components:
+  schemas:
+    ReportFilter:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 10
+          exclusiveMaximum: 10
+        tags:
+          type: array
+        status:
+          type: integer
+          enum:
+            - 1
+            - "2"
+    ReportResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: string
+          example:
+            - ok
+            - 42

@@ -112,6 +112,18 @@ print_resource_sampling_note() {
   fi
 }
 
+current_time_ns() {
+  local timestamp
+  timestamp="$(date +%s%N 2>/dev/null || true)"
+
+  if [[ "$timestamp" =~ ^[0-9]+$ ]]; then
+    echo "$timestamp"
+    return
+  fi
+
+  node -e "process.stdout.write(String(BigInt(Date.now()) * 1000000n))"
+}
+
 # Find the performance directory
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PERF_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
@@ -139,7 +151,7 @@ TOTAL_PATHS=$(grep -r "  /.*:" specs/*.yaml | wc -l | xargs)
 
 : > "${RESOURCE_SAMPLE_FILE}"
 
-START_TIME_NS=$(date +%s%N)
+START_TIME_NS=$(current_time_ns)
 docker run --name "${CONTAINER_NAME}" --rm -v "${PERF_DIR}:/usr/src/app" -w /usr/src/app specmatic/enterprise lint specs/*.yaml --format json > "${BENCHMARK_RESULT_FILE}" 2>&1 &
 LINTER_PID=$!
 
@@ -152,7 +164,7 @@ LINTER_EXIT_CODE=$?
 wait "${SAMPLER_PID}" 2>/dev/null
 set -e
 
-END_TIME_NS=$(date +%s%N)
+END_TIME_NS=$(current_time_ns)
 DURATION_MS=$(( (END_TIME_NS - START_TIME_NS) / 1000000 ))
 
 write_resource_summary "${RESOURCE_SAMPLE_FILE}" "${RESOURCE_SUMMARY_FILE}"

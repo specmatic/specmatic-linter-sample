@@ -1,0 +1,12 @@
+openapi: 3.0.3
+info:
+  title: Maturity demo
+  version: 1.0.0
+paths:
+  /reports:
+    get:
+      responses:
+        '200':
+          description: ok
+servers:
+  - url: https://api.example.com

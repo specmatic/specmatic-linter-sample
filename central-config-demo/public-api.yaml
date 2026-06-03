@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: Public API Demo
+  version: 1.0.0
+  # Missing contact and license - should trigger errors in public-api profile
+paths:
+  /users:
+    get:
+      # Missing summary - should trigger error in public-api profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+components:
+  securitySchemes:
+    basicAuth: # Not OAuth2/OpenID - should trigger error in public-api profile
+      type: http
+      scheme: basic

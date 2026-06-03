@@ -1,0 +1,45 @@
+rules:
+  rule/parameter-description-required:
+    severity: error
+    type: parameters
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - description
+    message: Every parameter must declare a description.
+
+profiles:
+  schema-only:
+    types:
+      - schema
+    rules:
+      extends:
+        - recommended
+
+  examples-only:
+    types:
+      - examples
+    rules:
+      extends:
+        - recommended
+
+  custom-parameters-only:
+    types:
+      - parameters
+    rules:
+      extends:
+        - minimal
+      include:
+        - rule/parameter-description-required
+
+  metadata-override:
+    types:
+      - metadata
+    rules:
+      extends:
+        - recommended
+      override:
+        operation-summary:
+          severity: warn
+          type: metadata

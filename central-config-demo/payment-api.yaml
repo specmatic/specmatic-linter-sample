@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Payment API Demo
+  version: 1.0.0
+  contact:
+    name: Payment Team
+  license:
+    name: Apache 2.0
+paths:
+  /payments:
+    get:
+      summary: List payments
+      operationId: list_payments # Snake case - might trigger operation-id-convention error in payment-api
+      parameters:
+        - name: limit
+          in: query
+          description: Max items to return
+          schema:
+            type: integer
+            # Missing minimum/maximum - should trigger pagination-bounds warning
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          # Missing problem-json - should trigger error-response-problem-json error
+components:
+  securitySchemes:
+    oAuth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          scopes:
+            read:payments: read payments

@@ -1,0 +1,13 @@
+profiles:
+  maturity-lint:
+    rules:
+      include:
+        - operation-summary
+        - info-license
+      override:
+        operation-summary:
+          severity: error
+          maturity: bronze
+        info-license:
+          severity: error
+          maturity: gold

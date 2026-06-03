@@ -1,74 +1,86 @@
 plugins:
- - ./js-plugin/index.js
-
-extends:
- - minimal
+  - ./js-plugin/index.js
 
 rules:
-  no-enum-type-mismatch: error
-  specmatic/invalid-numeric-bounds: error
-  specmatic/pattern-length-incompatible: error
-  specmatic/security-property-redefined: error
-  specmatic/ref-has-siblings: error
-  specmatic/missing-schema-fallback: error
-  specmatic/get-request-body-disallowed: error
+  rule/no-error-param:
+    severity: error
+    type: parameters
+    subject:
+      type: Parameter
+      property: name
+    assertions:
+      pattern: '^(?!error$).*$'
+    message: "Architectural violation: Parameter names must not be 'error'."
 
-  ### Configurable corporate rules ###
+  rule/parameter-description-required:
+    severity: error
+    type: parameters
+    subject:
+      type: Parameter
+    assertions:
+      required:
+        - description
+    message: "Architectural violation: All parameters must have a description."
 
-#  rule/no-error-param:
-#    severity: error
-#    subject:
-#      type: Parameter
-#      property: name
-#    assertions:
-#      pattern: '^(?!error$).*$'
-#    message: "Architectural violation: Parameter names must not be 'error'."
-#
-#  rule/parameter-description-required:
-#    severity: error
-#    subject:
-#      type: Parameter
-#    assertions:
-#      required:
-#        - description
-#    message: "Architectural violation: All parameters must have a description."
-#
-#  rule/force-oidc-auth:
-#    severity: error
-#    subject:
-#      type: SecurityScheme
-#      property: type
-#    assertions:
-#      const: openIdConnect
-#    message: "Architectural violation: Only OIDC authentication is permitted."
+  rule/force-oidc-auth:
+    severity: error
+    type: security
+    subject:
+      type: SecurityScheme
+      property: type
+    assertions:
+      const: openIdConnect
+    message: "Architectural violation: Only OIDC authentication is permitted."
 
-  ### Custom JS Rules ###
+  corp-standards/pagination-range:
+    severity: error
+    type: parameters
 
-#  corp-standards/pagination-range: error
-#  corp-standards/operation-id-naming: warn
+  corp-standards/operation-id-naming:
+    severity: warn
+    type: operations
 
-  ### Specmatic's Advanced Semantic Rules ###
+profiles:
+  minimal-semantic:
+    rules:
+      extends:
+        - minimal
+      include:
+        - no-enum-type-mismatch
+        - specmatic/invalid-numeric-bounds
+        - specmatic/pattern-length-incompatible
+        - specmatic/security-property-redefined
+        - specmatic/ref-has-siblings
+        - specmatic/missing-schema-fallback
+        - specmatic/get-request-body-disallowed
 
-#  specmatic/accept-response-content-type-conflict: error
-#  specmatic/content-type-header-declared: error
-#  specmatic/content-type-header-overrides-media-type: error
-#  specmatic/enum-no-matching-values: error
-#  specmatic/enum-nullability-coercion: error
-#  specmatic/enum-value-schema-mismatch: error
-#  specmatic/get-request-body-disallowed: error
-#  specmatic/invalid-additional-properties-usage: error
-#  specmatic/invalid-max-length: error
-#  specmatic/invalid-min-length: error
-#  specmatic/invalid-numeric-bounds: error
-#  specmatic/invalid-operation-status: error
-#  specmatic/invalid-parameter-shape: error
-#  specmatic/invalid-regex-format: error
-#  specmatic/length-exceeds-limit: error
-#  specmatic/missing-schema-fallback: error
-#  specmatic/pattern-length-incompatible: error
-#  specmatic/query-param-collision: error
-#  specmatic/ref-has-siblings: error
-#  specmatic/required-query-object-conflict: error
-#  specmatic/schema-unclear: error
-#  specmatic/security-property-redefined: error
-#  specmatic/security-scheme-missing: error
+  recommended-semantic:
+    rules:
+      extends:
+        - recommended
+      override:
+        specmatic/ref-has-siblings: error
+        specmatic/invalid-numeric-bounds: error
+        specmatic/pattern-length-incompatible: error
+        specmatic/security-property-redefined: error
+        specmatic/missing-schema-fallback: error
+        specmatic/get-request-body-disallowed: error
+
+  configurable-rules:
+    rules:
+      extends:
+        - recommended
+      include:
+        - rule/no-error-param
+        - rule/parameter-description-required
+        - rule/force-oidc-auth
+      override:
+        specmatic/ref-has-siblings: warn
+
+  js-rules:
+    rules:
+      extends:
+        - recommended
+      include:
+        - corp-standards/pagination-range
+        - corp-standards/operation-id-naming

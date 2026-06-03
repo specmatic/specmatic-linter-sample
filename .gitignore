@@ -2,3 +2,4 @@ results
 .idea/
 performance/benchmark_stderr.log
 build/
+.specmatic-linter/
