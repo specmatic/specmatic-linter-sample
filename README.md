@@ -221,7 +221,7 @@ You should now see violations that require JavaScript-based evaluation, includin
 
 Custom JavaScript rules are useful when a rule depends on cross-field logic, computed values, or dynamic expectations that the YAML DSL cannot express cleanly.
 
-For more detail, see [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md)
+For more detail, see [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md).
 
 ## 2. Maturity Levels
 
