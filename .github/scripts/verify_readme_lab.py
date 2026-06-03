@@ -27,27 +27,35 @@ class Expectation:
     maturity: str | None = None
 
     def as_terminaloutput(self) -> str:
-        if self.maturity is not None and self.errors is None:
-            return '\n'.join(
+        lines: list[str] = []
+        if self.errors is not None:
+            assert self.warnings is not None
+            assert self.ignored is not None
+            totals_indent = "  " if self.maturity is not None else ""
+            value_indent = "    " if self.maturity is not None else "  "
+            totals_close = "  }," if self.maturity is not None else "}"
+            lines.extend(
                 [
-                    '"maturity": {',
-                    f'  "level": "{self.maturity}"',
-                    "}",
+                    f'{totals_indent}"totals": {{',
+                    f'{value_indent}"errors": {self.errors},',
+                    f'{value_indent}"warnings": {self.warnings},',
+                    f'{value_indent}"ignored": {self.ignored}',
+                    totals_close,
                 ]
             )
 
-        assert self.errors is not None
-        assert self.warnings is not None
-        assert self.ignored is not None
-        return '\n'.join(
-            [
-                '"totals": {',
-                f'  "errors": {self.errors},',
-                f'  "warnings": {self.warnings},',
-                f'  "ignored": {self.ignored}',
-                "}",
-            ]
-        )
+        if self.maturity is not None:
+            maturity_indent = "  " if self.errors is not None else ""
+            value_indent = "    " if self.errors is not None else "  "
+            lines.extend(
+                [
+                    f'{maturity_indent}"maturity": {{',
+                    f'{value_indent}"level": "{self.maturity}"',
+                    f"{maturity_indent}}}",
+                ]
+            )
+
+        return "\n".join(lines)
 
 
 @dataclass(frozen=True)
@@ -176,7 +184,7 @@ def prepare_rule_types_step_2(repo_root: Path, temp_root: Path) -> Path:
     demo_dir = copy_demo("rule-types", temp_root)
     config = demo_dir / "specmatic-linter.yaml"
     text = config.read_text()
-    text = text.replace("types:\n      - schema\n      - parameters", "types:\n      - examples", 1)
+    text = text.replace("#    types:\n#      - examples", "    types:\n      - examples", 1)
     config.write_text(text)
     return demo_dir
 
@@ -185,7 +193,16 @@ def prepare_rule_types_step_3(repo_root: Path, temp_root: Path) -> Path:
     demo_dir = prepare_rule_types_step_2(repo_root, temp_root)
     config = demo_dir / "specmatic-linter.yaml"
     text = config.read_text()
-    text = text.replace("\n    types:\n      - examples", "", 1)
+    text = text.replace("    types:\n      - examples", "    types:\n      - examples\n      - schema", 1)
+    config.write_text(text)
+    return demo_dir
+
+
+def prepare_profiles_step_4(repo_root: Path, temp_root: Path) -> Path:
+    demo_dir = copy_demo("profiles", temp_root)
+    config = demo_dir / "specmatic-linter.yaml"
+    text = config.read_text()
+    text = text.replace("        operation-summary: error", "        operation-summary: warn", 1)
     config.write_text(text)
     return demo_dir
 
@@ -199,6 +216,10 @@ def command_maturity(mount_dir: Path) -> list[str]:
 
 
 def command_rule_types(mount_dir: Path) -> list[str]:
+    return docker_command(mount_dir, "lint", "openapi.yaml", "--config", "specmatic-linter.yaml")
+
+
+def command_profiles(mount_dir: Path) -> list[str]:
     return docker_command(mount_dir, "lint", "openapi.yaml", "--config", "specmatic-linter.yaml")
 
 
@@ -238,43 +259,43 @@ SCENARIOS = [
     Scenario(
         "rules-intro step 1",
         command_rules_intro,
-        Expectation(errors=7, warnings=22, ignored=0),
+        Expectation(errors=7, warnings=22, ignored=0, maturity="non_compliant"),
         prepare=lambda repo_root, temp_root: repo_root / "demo" / "rules-intro",
     ),
     Scenario(
         "rules-intro step 2",
         command_rules_intro,
-        Expectation(errors=10, warnings=22, ignored=0),
+        Expectation(errors=10, warnings=22, ignored=0, maturity="non_compliant"),
         prepare=prepare_rules_intro_step_2,
     ),
     Scenario(
         "rules-intro step 3",
         command_rules_intro,
-        Expectation(errors=11, warnings=23, ignored=0),
+        Expectation(errors=11, warnings=23, ignored=0, maturity="non_compliant"),
         prepare=prepare_rules_intro_step_3,
     ),
     Scenario(
         "maturity step 1",
         command_maturity,
-        Expectation(maturity="baseline"),
+        Expectation(errors=2, warnings=0, ignored=0, maturity="baseline"),
         prepare=lambda repo_root, temp_root: repo_root / "demo" / "maturity",
     ),
     Scenario(
         "maturity step 2",
         command_maturity,
-        Expectation(maturity="bronze"),
+        Expectation(errors=2, warnings=0, ignored=0, maturity="bronze"),
         prepare=prepare_maturity_step_2,
     ),
     Scenario(
         "maturity step 3",
         command_maturity,
-        Expectation(maturity="silver"),
+        Expectation(errors=1, warnings=1, ignored=0, maturity="silver"),
         prepare=prepare_maturity_step_3,
     ),
     Scenario(
         "rule-types step 1",
         command_rule_types,
-        Expectation(errors=5, warnings=1, ignored=0),
+        Expectation(errors=9, warnings=12, ignored=0),
         prepare=lambda repo_root, temp_root: repo_root / "demo" / "rule-types",
     ),
     Scenario(
@@ -286,8 +307,14 @@ SCENARIOS = [
     Scenario(
         "rule-types step 3",
         command_rule_types,
-        Expectation(errors=9, warnings=12, ignored=0),
+        Expectation(errors=5, warnings=2, ignored=0),
         prepare=prepare_rule_types_step_3,
+    ),
+    Scenario(
+        "profiles no profile",
+        command_profiles,
+        Expectation(errors=2, warnings=8, ignored=0),
+        prepare=lambda repo_root, temp_root: repo_root / "demo" / "profiles",
     ),
     Scenario(
         "profiles internal",
@@ -302,10 +329,10 @@ SCENARIOS = [
         prepare=lambda repo_root, temp_root: repo_root / "demo" / "profiles",
     ),
     Scenario(
-        "profiles payment-api",
-        command_profile("payment-api"),
-        Expectation(errors=7, warnings=5, ignored=0),
-        prepare=lambda repo_root, temp_root: repo_root / "demo" / "profiles",
+        "profiles tweak public-api",
+        command_profile("public-api"),
+        Expectation(errors=5, warnings=7, ignored=0),
+        prepare=prepare_profiles_step_4,
     ),
     Scenario(
         "central-config internal-api",
