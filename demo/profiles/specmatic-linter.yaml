@@ -22,6 +22,11 @@ rules:
     message: Only OAuth2 or OpenID Connect schemes are allowed.
 
 profiles:
+  default:
+    rules:
+      extends:
+        - recommended
+
   internal:
     rules:
       extends:

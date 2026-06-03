@@ -293,9 +293,23 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 
 ## 4. Profiles
 
-Profiles let different teams share the same rule catalogue while adopting different governance levels.
+Not every API needs the same level of linting rigor. Using profiles teams can share the same rule catalogue while adapting governance levels based on API type.
 
-### Step 1: Run The `internal` Profile
+### Step 1: Run without any Profile
+
+```bash
+docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
+```
+
+```terminaloutput
+"totals": {
+  "errors": 2,
+  "warnings": 8,
+  "ignored": 0
+}
+```
+
+### Step 2: Run The `internal` Profile
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile internal
@@ -309,7 +323,7 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 }
 ```
 
-### Step 2: Run The `public-api` Profile
+### Step 3: Run The `public-api` Profile
 
 ```bash
 docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile public-api
@@ -323,35 +337,33 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 }
 ```
 
-### Step 3: Run The `payment-api` Profile
-
-```bash
-docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile payment-api
-```
-
-```terminaloutput
-"totals": {
-  "errors": 7,
-  "warnings": 5,
-  "ignored": 0
-}
-```
-
 ### Step 4: Tweak A Profile
 
-In [demo/profiles/specmatic-linter.yaml](demo/profiles/specmatic-linter.yaml), change this inside `internal`:
-
-```yaml
-operation-summary: warn
-```
-
-to:
+In [demo/profiles/specmatic-linter.yaml](demo/profiles/specmatic-linter.yaml), change this inside `public-api`:
 
 ```yaml
 operation-summary: error
 ```
 
-Rerun the `internal` command and observe that the same spec now fails more strictly without changing the spec itself.
+to:
+
+```yaml
+operation-summary: warn
+```
+
+Rerun the `public-api` command 
+
+```bash
+docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --profile public-api
+```
+
+```terminaloutput
+"totals": {
+  "errors": 5,
+  "warnings": 7,
+  "ignored": 0
+}
+```
 
 ## 5. Central Config Repo
 
