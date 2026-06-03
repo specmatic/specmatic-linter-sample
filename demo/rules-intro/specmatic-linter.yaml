@@ -62,3 +62,29 @@ profiles:
       ### Step 3: uncomment to add these custom JS rules. ###
 #        - corp-standards/pagination-range
 #        - corp-standards/operation-id-naming
+
+
+      ### Specmatic's Advanced Semantic Rules ###
+#        specmatic/accept-response-content-type-conflict: error
+#        specmatic/content-type-header-declared: error
+#        specmatic/content-type-header-overrides-media-type: error
+#        specmatic/enum-no-matching-values: error
+#        specmatic/enum-nullability-coercion: error
+#        specmatic/enum-value-schema-mismatch: error
+#        specmatic/get-request-body-disallowed: error
+#        specmatic/invalid-additional-properties-usage: error
+#        specmatic/invalid-max-length: error
+#        specmatic/invalid-min-length: error
+#        specmatic/invalid-numeric-bounds: error
+#        specmatic/invalid-operation-status: error
+#        specmatic/invalid-parameter-shape: error
+#        specmatic/invalid-regex-format: error
+#        specmatic/length-exceeds-limit: error
+#        specmatic/missing-schema-fallback: error
+#        specmatic/pattern-length-incompatible: error
+#        specmatic/query-param-collision: error
+#        specmatic/ref-has-siblings: error
+#        specmatic/required-query-object-conflict: error
+#        specmatic/schema-unclear: error
+#        specmatic/security-property-redefined: error
+#        specmatic/security-scheme-missing: error
