@@ -110,11 +110,18 @@ Those new findings (1 error and 1 warning) have come from JavaScript logic rathe
 Supporting references:
 - [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md)
 
-## 2. Maturity
+## 2. Maturity levels
 
 This demo shows:
 - maturity is configured per rule
 - overall maturity is computed from failing error-level rules
+- Maturity has the following hierarchy:
+  - Non Compliant
+  - Baseline
+  - Bronze
+  - Silver
+  - Gold 
+  - Platinum
 
 ### Step 1: Run The Initial Setup
 
@@ -123,14 +130,23 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"maturity": {
-  "level": "baseline"
-}
+  "totals": {
+    "errors": 2,
+    "warnings": 0,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "baseline"
+  }
 ```
 
-The overall maturity is `baseline` because the first failing participating rule is `operation-summary`, and it currently requires `bronze`.
+There are 2 errors reported here:
+- `info-license` which is at `Gold level`
+- `operation-summary` which is at `Bronze level`
 
-### Step 2: Raise One Rule's Maturity Tier
+Since a rule at the Bronze level failed, the maturity is set to `baseline` which is has all passing rules.
+
+### Step 2: Raise One Rule's Maturity Level
 
 In [demo/maturity/specmatic-linter.yaml](demo/maturity/specmatic-linter.yaml), change:
 
@@ -151,14 +167,21 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"maturity": {
-  "level": "bronze"
-}
+  "totals": {
+    "errors": 2,
+    "warnings": 0,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "bronze"
+  }
 ```
+
+Now you see the same 2 rules have failed, but since we bumped up the maturity level of the failing rule, the overall spec's linting maturity has moved up to `bronze`.
 
 ### Step 3: Remove One Rule From Maturity Participation
 
-Change `operation-summary` from:
+Change the severity for rule `operation-summary` from:
 
 ```yaml
 severity: error
@@ -177,18 +200,23 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"maturity": {
-  "level": "silver"
-}
+  "totals": {
+    "errors": 1,
+    "warnings": 1,
+    "ignored": 0
+  },
+  "maturity": {
+    "level": "silver"
+  }
 ```
 
-The rule still fails, but it no longer participates in maturity because it is now only a warning and maturity is computed only from rules with error severity.
+Since the `operation-summary` rule is no longer reporting an error (instead it is reporting a warning), it does not participate in the maturity computation. Only rule with severity error participate in maturity computation.
 
 ## 3. Rule Types
 
 This demo shows how `types` lets you filter rules.
 
-Supported rule types:
+Built-in rule types:
 - `security`
 - `schema`
 - `examples`
