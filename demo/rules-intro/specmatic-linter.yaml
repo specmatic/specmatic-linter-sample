@@ -44,7 +44,7 @@ profiles:
   default:
     rules:
       extends:
-        - minimal
+        - starter
       override:
         specmatic/ref-has-siblings: error
         specmatic/invalid-numeric-bounds: error
