@@ -48,6 +48,7 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
   * [6. High-Performance Engine](#6-high-performance-engine)
       * [macOS / Linux](#macos--linux)
       * [Windows](#windows)
+  * [Future Roadmap](#future-roadmap)
 <!-- TOC -->
 
 ## Prerequisites
