@@ -2,9 +2,9 @@ rules:
   rule/parameter-description-required:
     severity: error
     type: parameters
-    on:
+    subject:
       type: Parameter
-    must:
+    assertions:
       required:
         - description
     message: Every parameter must declare a description.
@@ -12,10 +12,10 @@ rules:
   rule/security-scheme-modern:
     severity: error
     type: security
-    on:
+    subject:
       type: SecurityScheme
       property: type
-    must:
+    assertions:
       enum:
         - oauth2
         - openIdConnect

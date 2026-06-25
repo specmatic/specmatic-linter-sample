@@ -24,7 +24,7 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
   * [Folder Layout](#folder-layout)
   * [1. Rules Intro](#1-rules-intro)
     * [Step 1: Run Built-in Rules](#step-1-run-built-in-rules)
-      * [Starter rule-set](#starter-rule-set)
+      * [Minimal rule-set](#minimal-rule-set)
       * [Recommended rule-set](#recommended-rule-set)
     * [Step 2: Enable Configurable Rules](#step-2-enable-configurable-rules)
     * [Step 3: Enable Custom JS Rules](#step-3-enable-custom-js-rules)
@@ -83,7 +83,7 @@ This demo introduces the three kinds of rules:
 
 ### Step 1: Run Built-in Rules
 
-#### Starter rule-set
+#### Minimal rule-set
 
 ```bash
 docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
@@ -100,14 +100,7 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
   }
 ```
 
-This command lints `openapi.yaml` using the built-in **`starter` ruleset**, which contains **54 rules**, configured in `specmatic-linter.yaml`.
-
-The built-in rulesets form a cumulative ladder:
-
-- `starter`
-- `recommended` = `starter` plus additional broadly useful rules
-- `strict` = `recommended` plus stricter governance rules
-- `complete` = `strict` plus the remaining curated high-rigor rules
+This command lints `openapi.yaml` using the built-in **`minimal` ruleset**, which contains **54 rules**, configured in `specmatic-linter.yaml`.
 
 You should see the following semantic issues being reported:
 
@@ -124,7 +117,7 @@ Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.
 
 ```yaml
       extends:
-        - starter
+        - minimal
 ```
 
 to
@@ -151,8 +144,6 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 This lints `openapi.yaml` spec file using the **`recommended` ruleset**, which contains **84 rules**.
-
-`recommended` already includes everything in `starter`, so you only extend the highest tier you want to run.
 
 Specmatic Linter can detect issues such as the following:
 
