@@ -2,28 +2,28 @@ rules:
   rule/parameter-name-defined:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
-    assertions:
+    must:
       required:
         - name
 
   rule/parameter-schema-defined:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
-    assertions:
+    must:
       required:
         - schema
 
   rule/security-scheme-supported:
     severity: warn
     type: security
-    subject:
+    on:
       type: SecurityScheme
       property: type
-    assertions:
+    must:
       enum:
         - oauth2
         - http
@@ -32,16 +32,16 @@ rules:
   rule/security-http-scheme-supported:
     severity: warn
     type: security
-    subject:
+    on:
       type: SecurityScheme
       property: scheme
-    where:
-      - subject:
+    when:
+      - on:
           type: SecurityScheme
           property: type
-        assertions:
+        must:
           const: http
-    assertions:
+    must:
       enum:
         - bearer
         - basic
@@ -49,16 +49,16 @@ rules:
   rule/security-apikey-location-supported:
     severity: warn
     type: security
-    subject:
+    on:
       type: SecurityScheme
       property: in
-    where:
-      - subject:
+    when:
+      - on:
           type: SecurityScheme
           property: type
-        assertions:
+        must:
           const: apiKey
-    assertions:
+    must:
       enum:
         - header
         - query
