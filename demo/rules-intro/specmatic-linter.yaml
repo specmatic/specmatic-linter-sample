@@ -5,19 +5,19 @@ rules:
   rule/no-error-param:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
       property: name
-    assertions:
+    must:
       pattern: '^(?!error$).*$'
     message: "Architectural violation: Parameter names must not be 'error'."
 
   rule/parameter-description-required:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
-    assertions:
+    must:
       required:
         - description
     message: "Architectural violation: All parameters must have a description."
@@ -25,10 +25,10 @@ rules:
   rule/force-oidc-auth:
     severity: error
     type: security
-    subject:
+    on:
       type: SecurityScheme
       property: type
-    assertions:
+    must:
       const: openIdConnect
     message: "Architectural violation: Only OIDC authentication is permitted."
 
@@ -44,7 +44,7 @@ profiles:
   default:
     rules:
       extends:
-        - minimal
+        - starter
       override:
         specmatic/ref-has-siblings: error
         specmatic/invalid-numeric-bounds: error

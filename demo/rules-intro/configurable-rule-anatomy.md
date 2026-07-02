@@ -9,10 +9,10 @@ rules:
   rule/no-error-param:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
       property: name
-    assertions:
+    must:
       pattern: '^(?!error$).*$'
     message: "Architectural violation: Parameter names must not be 'error'."
 ```

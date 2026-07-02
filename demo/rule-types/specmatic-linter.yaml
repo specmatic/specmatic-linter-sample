@@ -2,9 +2,9 @@ rules:
   rule/parameter-description-required:
     severity: error
     type: parameters
-    subject:
+    on:
       type: Parameter
-    assertions:
+    must:
       required:
         - description
     message: Every parameter must declare a description.
