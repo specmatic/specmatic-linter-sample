@@ -46,12 +46,12 @@ profiles:
       extends:
         - starter
       override:
-        specmatic/ref-has-siblings: error
-        specmatic/invalid-numeric-bounds: error
-        specmatic/pattern-length-incompatible: error
-        specmatic/security-property-redefined: error
-        specmatic/missing-schema-fallback: error
-        specmatic/get-request-body-disallowed: error
+        ref-has-siblings: error
+        invalid-numeric-bounds: error
+        pattern-length-incompatible: error
+        security-property-redefined: error
+        missing-schema-fallback: error
+        get-request-body-disallowed: error
 
       ### Step 2: uncomment to add these configurable rules. ###
 #      include:
@@ -65,26 +65,30 @@ profiles:
 
 
       ### Specmatic's Advanced Semantic Rules ###
-#        specmatic/accept-response-content-type-conflict: error
-#        specmatic/content-type-header-declared: error
-#        specmatic/content-type-header-overrides-media-type: error
-#        specmatic/enum-no-matching-values: error
-#        specmatic/enum-nullability-coercion: error
-#        specmatic/enum-value-schema-mismatch: error
-#        specmatic/get-request-body-disallowed: error
-#        specmatic/invalid-additional-properties-usage: error
-#        specmatic/invalid-max-length: error
-#        specmatic/invalid-min-length: error
-#        specmatic/invalid-numeric-bounds: error
-#        specmatic/invalid-operation-status: error
-#        specmatic/invalid-parameter-shape: error
-#        specmatic/invalid-regex-format: error
-#        specmatic/length-exceeds-limit: error
-#        specmatic/missing-schema-fallback: error
-#        specmatic/pattern-length-incompatible: error
-#        specmatic/query-param-collision: error
-#        specmatic/ref-has-siblings: error
-#        specmatic/required-query-object-conflict: error
-#        specmatic/schema-unclear: error
-#        specmatic/security-property-redefined: error
-#        specmatic/security-scheme-missing: error
+#        accept-response-content-type-conflict: error
+#        allof-contradictory-constraints: error
+#        array-max-items: error
+#        content-type-header-declared: error
+#        content-type-header-overrides-media-type: error
+#        define-validation-error-response: error
+#        duplicate-oneof-discriminator: error
+#        enum-no-matching-values: error
+#        enum-nullability-coercion: error
+#        enum-value-schema-mismatch: error
+#        impossible-object-cardinality: error
+#        integer-bounds-required: error
+#        invalid-additional-properties-usage: error
+#        invalid-max-length: error
+#        invalid-min-length: error
+#        invalid-operation-status: error
+#        invalid-parameter-shape: error
+#        invalid-regex-format: error
+#        length-exceeds-limit: error
+#        no-unconstrained-additional-properties: error
+#        oas30-enum-null-coercion: error
+#        query-param-collision: error
+#        required-query-object-conflict: error
+#        response-body-not-allowed: error
+#        schema-unclear: error
+#        security-scheme-missing: error
+#        string-max-length-or-enum: error

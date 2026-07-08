@@ -7,58 +7,119 @@ const perfDir = path.join(__dirname, '..');
 const specsDir = path.join(perfDir, 'specs');
 const resultsDir = path.join(perfDir, 'results');
 const benchmarkResourcesFile = path.join(perfDir, 'benchmark_resources.json');
+const reportsDir = path.join(perfDir, 'build', 'reports', 'specmatic', 'lint');
 
 if (!fs.existsSync(resultsDir)) {
     fs.mkdirSync(resultsDir);
 }
 
-// Extract and parse all JSON objects
-// We'll use a more robust way to find valid JSON blocks by counting braces
-let i = 0;
-while (i < input.length) {
-    if (input[i] === '{') {
-        let openBraces = 0;
-        let jsonStr = "";
-        let j = i;
-        while (j < input.length) {
-            if (input[j] === '{') openBraces++;
-            else if (input[j] === '}') openBraces--;
-            jsonStr += input[j];
-            if (openBraces === 0) break;
-            j++;
-        }
-        
-        try {
-            const data = JSON.parse(jsonStr);
-            if (data.totals && data.problems) {
-                const ref = data.problems.length > 0 
-                    ? data.problems[0].location[0].source.ref 
-                    : null;
-                
-                if (ref) {
-                    const fileName = ref.split('/').pop();
-                    const filePath = path.join(specsDir, fileName);
-                    let lineCount = 0;
-                    if (fs.existsSync(filePath)) {
-                        lineCount = fs.readFileSync(filePath, 'utf8').split('\n').length;
-                    }
-                    
-                    results.push({
-                        file: fileName,
-                        errors: data.totals.errors,
-                        warnings: data.totals.warnings,
-                        lines: lineCount,
-                        data: data
-                    });
-                }
+function extractJsonObjectsFromText(text) {
+    const extracted = [];
+    let i = 0;
+
+    while (i < text.length) {
+        if (text[i] === '{') {
+            let openBraces = 0;
+            let jsonStr = "";
+            let j = i;
+            while (j < text.length) {
+                if (text[j] === '{') openBraces++;
+                else if (text[j] === '}') openBraces--;
+                jsonStr += text[j];
+                if (openBraces === 0) break;
+                j++;
             }
-            i = j + 1;
-        } catch (e) {
-            i++;
+
+            try {
+                extracted.push(JSON.parse(jsonStr));
+                i = j + 1;
+                continue;
+            } catch (e) {
+                i++;
+                continue;
+            }
         }
-    } else {
+
         i++;
     }
+
+    return extracted;
+}
+
+function collectFiles(rootDir, predicate) {
+    if (!fs.existsSync(rootDir)) {
+        return [];
+    }
+
+    const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+    const files = [];
+
+    for (const entry of entries) {
+        const fullPath = path.join(rootDir, entry.name);
+        if (entry.isDirectory()) {
+            files.push(...collectFiles(fullPath, predicate));
+        } else if (predicate(fullPath)) {
+            files.push(fullPath);
+        }
+    }
+
+    return files;
+}
+
+function reportToResult(data) {
+    if (!data || !data.totals || !Array.isArray(data.problems)) {
+        return null;
+    }
+
+    const ref = data.problems.find(problem => problem.location?.[0]?.source?.ref)?.location?.[0]?.source?.ref ?? null;
+    if (!ref) {
+        return null;
+    }
+
+    const fileName = path.basename(ref);
+    const filePath = path.join(specsDir, fileName);
+    let lineCount = 0;
+    if (fs.existsSync(filePath)) {
+        lineCount = fs.readFileSync(filePath, 'utf8').split('\n').length;
+    }
+
+    return {
+        file: fileName,
+        errors: data.totals.errors ?? 0,
+        warnings: data.totals.warnings ?? 0,
+        lines: lineCount,
+        data
+    };
+}
+
+function loadResultsFromReports() {
+    const reportFiles = collectFiles(reportsDir, filePath => filePath.endsWith('.json'));
+
+    for (const reportFile of reportFiles) {
+        try {
+            const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+            const result = reportToResult(report);
+            if (result) {
+                results.push(result);
+            }
+        } catch (error) {
+            // Ignore malformed files that are not lint reports.
+        }
+    }
+}
+
+function loadResultsFromStdIn() {
+    for (const jsonObject of extractJsonObjectsFromText(input)) {
+        const result = reportToResult(jsonObject);
+        if (result) {
+            results.push(result);
+        }
+    }
+}
+
+loadResultsFromReports();
+if (results.length === 0 && input.trim().length > 0) {
+    loadResultsFromStdIn();
 }
 
 if (results.length === 0) {

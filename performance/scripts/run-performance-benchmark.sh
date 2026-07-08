@@ -133,11 +133,13 @@ RESULTS_DIR="${PERF_DIR}/results"
 BENCHMARK_RESULT_FILE="${PERF_DIR}/benchmark_result.json"
 RESOURCE_SAMPLE_FILE="${PERF_DIR}/benchmark_resource_samples.txt"
 RESOURCE_SUMMARY_FILE="${PERF_DIR}/benchmark_resources.json"
+REPORTS_DIR="${PERF_DIR}/build/reports/specmatic/lint"
 CONTAINER_NAME="specmatic-linter-benchmark-$$"
 
 # Ensure results directory is clean
 rm -rf "${RESULTS_DIR}"
 mkdir -p "${RESULTS_DIR}"
+rm -rf "${REPORTS_DIR}"
 
 echo ""
 echo "--- Starting Performance Benchmark (Enterprise Estate) ---"
@@ -152,7 +154,7 @@ TOTAL_PATHS=$(grep -r "  /.*:" specs/*.yaml | wc -l | xargs)
 : > "${RESOURCE_SAMPLE_FILE}"
 
 START_TIME_NS=$(current_time_ns)
-docker run --name "${CONTAINER_NAME}" --rm -v "${PERF_DIR}:/usr/src/app" -w /usr/src/app specmatic/enterprise lint specs/*.yaml --format json > "${BENCHMARK_RESULT_FILE}" 2>&1 &
+docker run --name "${CONTAINER_NAME}" --rm -v "${PERF_DIR}:/usr/src/app" -w /usr/src/app specmatic/enterprise lint specs/*.yaml > "${BENCHMARK_RESULT_FILE}" 2>&1 &
 LINTER_PID=$!
 
 collect_resource_samples "${CONTAINER_NAME}" "${LINTER_PID}" "${RESOURCE_SAMPLE_FILE}" &
@@ -169,7 +171,15 @@ DURATION_MS=$(( (END_TIME_NS - START_TIME_NS) / 1000000 ))
 
 write_resource_summary "${RESOURCE_SAMPLE_FILE}" "${RESOURCE_SUMMARY_FILE}"
 
-if [ ! -s "${BENCHMARK_RESULT_FILE}" ]; then
+if [ ! -d "${REPORTS_DIR}" ] || ! find "${REPORTS_DIR}" -name '*.json' -print -quit | grep -q .; then
+  if [ -s "${BENCHMARK_RESULT_FILE}" ]; then
+    cat "${BENCHMARK_RESULT_FILE}"
+  fi
+  echo "Benchmark failed before producing any lint report files."
+  exit "${LINTER_EXIT_CODE}"
+fi
+
+if [ ! -s "${BENCHMARK_RESULT_FILE}" ] && [ "${LINTER_EXIT_CODE}" -ne 0 ]; then
   echo "Benchmark failed before producing any linter output."
   exit "${LINTER_EXIT_CODE}"
 fi

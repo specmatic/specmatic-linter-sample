@@ -25,6 +25,8 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
   * [1. Rules Intro](#1-rules-intro)
     * [Step 1: Run Built-in Rules](#step-1-run-built-in-rules)
       * [Starter rule-set](#starter-rule-set)
+        * [JSON Report](#json-report)
+        * [HTML Report](#html-report)
       * [Recommended rule-set](#recommended-rule-set)
     * [Step 2: Enable Configurable Rules](#step-2-enable-configurable-rules)
     * [Step 3: Enable Custom JS Rules](#step-3-enable-custom-js-rules)
@@ -90,22 +92,59 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 5,
-    "warnings": 4,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "Gold"
-  }
+Lint report for openapi.yaml generated at build/reports/specmatic/lint/openapi/lint-report-openapi.json
+Target: openapi.yaml
+Maturity Level: Silver
+Errors: 6, Warnings: 4, Ignored: 0
+Status: FAILED
 ```
 
-This command lints `openapi.yaml` using the built-in **`starter` ruleset**, which contains **54 rules**, configured in `specmatic-linter.yaml`.
+This command lints `openapi.yaml` using the built-in **`starter` ruleset**, which includes **33 out of 172 built in rules**, configured in `specmatic-linter.yaml`.
+
+The output shows that the maturity level for `openapi.yaml` is at `Silver level` and marked the `status` as `FAILED` since there are `6 errors`.
+
+##### JSON Report
+By default, specmatic-linter produces a [json report](demo/rules-intro/build/reports/specmatic/lint/openapi/lint-report-openapi.json) with detailed diagnostics for each error or warning as follows:
+```json
+{
+  "ruleId": "get-request-body-disallowed",
+  "severity": "error",
+  "message": "GET operations must not define a requestBody in OAS 3.x.x",
+  "type": "operations",
+  "location": [
+    {
+      "source": {
+        "ref": "openapi.yaml"
+      },
+      "pointer": "#/paths/~1semantic-checks/get/requestBody",
+      "line": 12,
+      "column": 7
+    }
+  ],
+  "requiredForMaturity": "Gold"
+}
+```
+
+##### HTML Report
+However, if you want a rich HTML report, you can run the following command:
+
+```bash
+docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml --format=html
+```
+
+```terminaloutput
+Lint report for openapi.yaml generated at build/reports/specmatic/lint/openapi/lint-report-openapi.html
+Target: openapi.yaml
+Maturity Level: Silver
+Errors: 6, Warnings: 4, Ignored: 0
+Status: FAILED
+```
 
 The built-in rulesets form a cumulative ladder:
 
 - `starter`
-- `recommended` = `starter` plus additional broadly useful rules
+- `lenient` = `starter` plus additional specmatic rules at warn level
+- `recommended` = `lenient` plus additional broadly useful rules
 - `strict` = `recommended` plus stricter governance rules
 - `complete` = `strict` plus the remaining curated high-rigor rules
 
@@ -140,19 +179,15 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 7,
-    "warnings": 22,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "Non compliant"
-  }
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 30, Warnings: 49, Ignored: 0
+Status: FAILED
 ```
 
-This lints `openapi.yaml` spec file using the **`recommended` ruleset**, which contains **84 rules**.
+This lints `openapi.yaml` spec file using the **`recommended` ruleset**, which contains **172 rules**.
 
-`recommended` already includes everything in `starter`, so you only extend the highest tier you want to run.
+`recommended` already includes everything in `starter`, so you should only extend the highest tier you want to run.
 
 Specmatic Linter can detect issues such as the following:
 
@@ -181,14 +216,10 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 10,
-    "warnings": 22,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "non_compliant"
-  }
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 33, Warnings: 49, Ignored: 0
+Status: FAILED
 ```
 
 You should now see 3 additional violations (errors) from organization-specific YAML DSL rules, including:
@@ -214,14 +245,10 @@ docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint ope
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 11,
-    "warnings": 23,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "non_compliant"
-  }
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 34, Warnings: 50, Ignored: 0
+Status: FAILED
 ```
 
 You should now see violations that require JavaScript-based evaluation, including:
@@ -257,21 +284,17 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 2,
-    "warnings": 0,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "baseline"
-  }
+Target: openapi.yaml
+Maturity Level: Baseline
+Errors: 2, Warnings: 0, Ignored: 0
+Status: FAILED
 ```
 
 There are 2 errors reported here:
 - `info-license`, which is at the `Gold` level
 - `operation-summary`, which is at the `Bronze` level
 
-Since a rule at the bronze level failed, the maturity is set to `baseline`, the highest level at which all rules are passing.
+Since a rule at the bronze level failed, the maturity is set to `Baseline`, the highest level at which all rules are passing.
 
 ### Step 2: Raise One Rule's Maturity Level
 
@@ -294,17 +317,13 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 2,
-    "warnings": 0,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "bronze"
-  }
+Target: openapi.yaml
+Maturity Level: Bronze
+Errors: 2, Warnings: 0, Ignored: 0
+Status: FAILED
 ```
 
-The same 2 rules still fail, but because the failing rule now has a higher maturity level, the overall spec maturity moves up to `bronze`.
+The same 2 rules still fail, but because the failing rule now has a higher maturity level, the overall spec maturity moves up to `Bronze`.
 
 ### Step 3: Remove One Rule From Maturity Participation
 
@@ -327,17 +346,13 @@ docker run --rm -v ./demo/maturity:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-  "totals": {
-    "errors": 1,
-    "warnings": 1,
-    "ignored": 0
-  },
-  "maturity": {
-    "level": "silver"
-  }
+Target: openapi.yaml
+Maturity Level: Silver
+Errors: 1, Warnings: 1, Ignored: 0
+Status: FAILED
 ```
 
-Since `operation-summary` no longer reports an error as it now reports a warning, it no longer participates in the maturity computation. Only rules with severity `error` participate.
+Since `operation-summary` no longer reports an error as it now reports a warning, it no longer participates in the maturity computation. Only rules with severity `error` participate. Hence, the maturity level has changed to `Silver`
 
 ## 3. Rule Types
 
@@ -362,11 +377,10 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 9,
-  "warnings": 12,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 20, Warnings: 21, Ignored: 0
+Status: FAILED
 ```
 
 ### Step 2: Run rules only of type `examples`
@@ -385,11 +399,10 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 1,
-  "warnings": 2,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Baseline
+Errors: 1, Warnings: 2, Ignored: 0
+Status: FAILED
 ```
 
 ### Step 3: Run rules of type `examples` or `schema`
@@ -415,11 +428,10 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 5,
-  "warnings": 2,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 11, Warnings: 8, Ignored: 0
+Status: FAILED
 ```
 
 ## 4. Profiles
@@ -437,11 +449,10 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 2,
-  "warnings": 8,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 9, Warnings: 12, Ignored: 0
+Status: FAILED
 ```
 
 ### Step 2: Run the `internal` Profile
@@ -451,11 +462,10 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 2,
-  "warnings": 7,
-  "ignored": 2
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 9, Warnings: 12, Ignored: 2
+Status: FAILED
 ```
 
 ### Step 3: Run the `public-api` Profile
@@ -465,11 +475,10 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 6,
-  "warnings": 6,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 13, Warnings: 11, Ignored: 0
+Status: FAILED
 ```
 
 ### Step 4: Tweak A Profile
@@ -493,11 +502,10 @@ docker run --rm -v ./demo/profiles:/usr/src/app specmatic/enterprise lint openap
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 5,
-  "warnings": 7,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 12, Warnings: 12, Ignored: 0
+Status: FAILED
 ```
 
 ## 5. Central Config Repo
@@ -521,11 +529,10 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 2,
-  "warnings": 9,
-  "ignored": 0
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 11, Warnings: 13, Ignored: 0
+Status: FAILED
 ```
 
 If your Specmatic linter config file, `specmatic-linter.yaml`, is not at the top level, pass its path like this:
@@ -534,6 +541,13 @@ If your Specmatic linter config file, `specmatic-linter.yaml`, is not at the top
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
   --config-repo-url=https://github.com/specmatic/central-linter-config.git \
   --config=specmatic-linter.yaml
+```
+
+```terminaloutput
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 11, Warnings: 13, Ignored: 0
+Status: FAILED
 ```
 
 If your central config repo is private, set:
@@ -553,11 +567,10 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 ```
 
 ```terminaloutput
-"totals": {
-  "errors": 6,
-  "warnings": 7,
-  "ignored": 2
-}
+Target: openapi.yaml
+Maturity Level: Non compliant
+Errors: 15, Warnings: 15, Ignored: 2
+Status: FAILED
 ```
 
 ### Why the Central Config Repo Flow Helps
@@ -599,19 +612,19 @@ cd performance
 Note: Detailed results for each spec will be saved to performance/results/
 Specification File        |    Lines |   Errors |   Warnings
 --------------------------+----------+----------+-----------
-spec-1.yaml               |     3409 |      651 |       1902
+spec-1.yaml               |     3409 |     1952 |       3002
 ...
 ...
-spec-50.yaml              |     2167 |      383 |       1384
+spec-50.yaml              |     2167 |     1030 |       2384
 --------------------------+----------+----------+-----------
-TOTAL ESTATE              |   102713 |    18041 |      68343
+TOTAL ESTATE              |   102713 |    46918 |      118442
 
 Resource Utilization
-Average CPU Usage: 589.25%
-Peak CPU Usage:    754.46%
+Average CPU Usage: 743.50%
+Peak CPU Usage:    948.34%
 
 ✅ SUCCESS: Linted 50 specifications (~12550 paths)
-⏱️  Total Execution Time: 3991ms
+⏱️  Total Execution Time: 6749ms
 
 📂 Detailed reports saved to: results/
 ```

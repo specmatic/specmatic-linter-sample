@@ -21,5 +21,6 @@ profiles:
       override:
         no-invalid-schema-examples: error
         no-enum-type-mismatch: error
-        specmatic/missing-schema-fallback: error
-        specmatic/invalid-numeric-bounds: error
+        missing-schema-fallback: error
+        invalid-numeric-bounds: error
+        scalar-property-missing-example: warn

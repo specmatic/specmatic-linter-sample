@@ -7,6 +7,7 @@ $resultsDir = Join-Path $perfDir "results"
 $benchmarkResultFile = Join-Path $perfDir "benchmark_result.json"
 $resourceSummaryFile = Join-Path $perfDir "benchmark_resources.json"
 $stderrFile = Join-Path $perfDir "benchmark_stderr.log"
+$reportsDir = Join-Path $perfDir "build/reports/specmatic/lint"
 $formatScript = Join-Path $scriptDir "format-results.js"
 $containerName = "specmatic-linter-benchmark-{0}" -f ([guid]::NewGuid().ToString("N").Substring(0, 12))
 
@@ -14,6 +15,9 @@ if (Test-Path $resultsDir) {
     Remove-Item $resultsDir -Recurse -Force
 }
 New-Item -ItemType Directory -Path $resultsDir | Out-Null
+if (Test-Path $reportsDir) {
+    Remove-Item $reportsDir -Recurse -Force
+}
 
 Write-Host ""
 Write-Host "--- Starting Performance Benchmark (Enterprise Estate) ---"
@@ -49,7 +53,6 @@ $argumentList = @(
     "lint"
 )
 $argumentList += $specFiles | ForEach-Object { $_.Name }
-$argumentList += @("--format", "json")
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $process = Start-Process -FilePath "docker" -ArgumentList $argumentList -WorkingDirectory $perfDir -RedirectStandardOutput $benchmarkResultFile -RedirectStandardError $stderrFile -NoNewWindow -PassThru
@@ -128,11 +131,23 @@ $resourceSummary = [ordered]@{
 }
 $resourceSummary | ConvertTo-Json | Set-Content -Path $resourceSummaryFile
 
+if (-not (Test-Path $reportsDir) -or -not (Get-ChildItem -Path $reportsDir -Recurse -Filter "*.json" -ErrorAction SilentlyContinue | Select-Object -First 1)) {
+    if (Test-Path $benchmarkResultFile) {
+        Get-Content $benchmarkResultFile
+    }
+    if (Test-Path $stderrFile) {
+        Get-Content $stderrFile
+    }
+    throw "Benchmark failed before producing any lint report files."
+}
+
 if (-not (Test-Path $benchmarkResultFile) -or (Get-Item $benchmarkResultFile).Length -eq 0) {
     if (Test-Path $stderrFile) {
         Get-Content $stderrFile
     }
-    throw "Benchmark failed before producing any linter output."
+    if ($process.ExitCode -ne 0) {
+        throw "Benchmark failed before producing any linter output."
+    }
 }
 
 Get-Content -Raw $benchmarkResultFile | node $formatScript
