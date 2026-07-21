@@ -379,7 +379,7 @@ docker run --rm -v ./demo/rule-types:/usr/src/app specmatic/enterprise lint open
 ```terminaloutput
 Target: openapi.yaml
 Maturity Level: Non compliant
-Errors: 20, Warnings: 21, Ignored: 0
+Errors: 20, Warnings: 23, Ignored: 0
 Status: FAILED
 ```
 
