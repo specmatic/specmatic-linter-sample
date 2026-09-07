@@ -154,7 +154,7 @@ TOTAL_PATHS=$(grep -r "  /.*:" specs/*.yaml | wc -l | xargs)
 : > "${RESOURCE_SAMPLE_FILE}"
 
 START_TIME_NS=$(current_time_ns)
-docker run --name "${CONTAINER_NAME}" --rm -v "${PERF_DIR}:/usr/src/app" -w /usr/src/app specmatic/enterprise lint specs/*.yaml > "${BENCHMARK_RESULT_FILE}" 2>&1 &
+docker run --name "${CONTAINER_NAME}" --user "$(id -u):$(id -g)" --rm -v "${PERF_DIR}:/usr/src/app" -w /usr/src/app specmatic/enterprise lint specs/*.yaml > "${BENCHMARK_RESULT_FILE}" 2>&1 &
 LINTER_PID=$!
 
 collect_resource_samples "${CONTAINER_NAME}" "${LINTER_PID}" "${RESOURCE_SAMPLE_FILE}" &

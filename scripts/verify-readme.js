@@ -36,25 +36,31 @@ function findFile(dir, name) {
 function verify(name, source, expected, args = [], edit, ruleIds = []) {
   const work = path.join(tempRoot, name.replaceAll(' ', '-'));
   fs.cpSync(path.join(root, source), work, { recursive: true });
+  fs.rmSync(path.join(work, 'build'), { recursive: true, force: true });
+  fs.rmSync(path.join(work, '.specmatic-linter'), { recursive: true, force: true });
   if (edit) edit(path.join(work, 'specmatic-linter.yaml'));
 
   const dockerArgs = ['run', '--rm'];
+  if (process.getuid) dockerArgs.push('--user', `${process.getuid()}:${process.getgid()}`);
   if (process.env.CENTRAL_CONFIG_REPO_TOKEN) dockerArgs.push('-e', 'CENTRAL_CONFIG_REPO_TOKEN');
   dockerArgs.push('-v', `${work}:/usr/src/app`, image, 'lint', 'openapi.yaml', ...args);
   const result = run('docker', dockerArgs, root);
   assert.equal(result.status, 1, `${name}: expected lint violations\n${result.output}`);
-
-  const reportFile = findFile(work, 'lint-report-openapi.json');
-  assert.ok(reportFile, `${name}: JSON report missing\n${result.output}`);
-  const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
-  assert.deepEqual(report.totals, expected.totals, `${name}: totals changed`);
-  assert.equal(report.maturity.level, expected.maturity, `${name}: maturity changed`);
+  assert.ok(result.output.includes(`Maturity Level: ${expected.maturity}`), `${name}: maturity changed\n${result.output}`);
+  assert.ok(result.output.includes(`Errors: ${expected.totals.errors}, Warnings: ${expected.totals.warnings}, Ignored: ${expected.totals.ignored}`), `${name}: totals changed\n${result.output}`);
   assert.match(result.output, /Status: FAILED/, `${name}: status changed`);
-  for (const ruleId of ruleIds) {
-    assert.ok(report.problems.some(problem => problem.ruleId === ruleId), `${name}: ${ruleId} missing`);
-  }
+
   if (args.includes('--format=html')) {
-    assert.ok(fs.existsSync(path.join(work, 'build/reports/specmatic/lint/openapi/lint-report-openapi.html')), `${name}: HTML report missing`);
+    assert.ok(findFile(work, 'lint-report-openapi.html'), `${name}: HTML report missing`);
+  } else {
+    const reportFile = findFile(work, 'lint-report-openapi.json');
+    assert.ok(reportFile, `${name}: JSON report missing\n${result.output}`);
+    const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+    assert.deepEqual(report.totals, expected.totals, `${name}: JSON totals changed`);
+    assert.equal(report.maturity.level, expected.maturity, `${name}: JSON maturity changed`);
+    for (const ruleId of ruleIds) {
+      assert.ok(report.problems.some(problem => problem.ruleId === ruleId), `${name}: ${ruleId} missing`);
+    }
   }
   console.log(`PASS ${name}`);
   passed++;
