@@ -29,7 +29,6 @@ This sample project is a guided, hands-on lab for learning Specmatic Linter in t
         * [HTML Report](#html-report)
       * [Recommended rule-set](#recommended-rule-set)
     * [Step 2: Enable Configurable Rules](#step-2-enable-configurable-rules)
-    * [Step 3: Enable Custom JS Rules](#step-3-enable-custom-js-rules)
   * [2. Maturity Levels](#2-maturity-levels)
     * [Step 1: Run the Initial Setup](#step-1-run-the-initial-setup)
     * [Step 2: Raise One Rule's Maturity Level](#step-2-raise-one-rules-maturity-level)
@@ -76,12 +75,11 @@ Start at the top and work through the lab step by step. Each section below expla
 
 Problem: Teams need more than one kind of linting rule because some standards are universal, some are organization-specific, and some require contextual/custom logic.
 
-Benefit: Specmatic Linter lets you combine built-in, configurable, and custom JavaScript rules in one governance flow.
+Benefit: Specmatic Linter lets you combine built-in and configurable rules in one governance flow.
 
 This demo introduces the three kinds of rules:
 - built-in rules
 - configurable rules
-- custom JS rules
 
 ### Step 1: Run Built-in Rules
 
@@ -159,7 +157,7 @@ You should see the following semantic issues being reported:
 
 #### Recommended rule-set
 
-Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and update 
+Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and update
 
 ```yaml
       extends:
@@ -229,36 +227,6 @@ You should now see 3 additional violations (errors) from organization-specific Y
 - allowing only OIDC-based security schemes
 
 To understand how these rules are structured, see [demo/rules-intro/configurable-rule-anatomy.md](demo/rules-intro/configurable-rule-anatomy.md).
-
-### Step 3: Enable Custom JS Rules
-
-Open [demo/rules-intro/specmatic-linter.yaml](demo/rules-intro/specmatic-linter.yaml) and uncomment the block under the `Step 3` comment.
-
-This adds 2 more custom JS rules:
-- `corp-standards/pagination-range`
-- `corp-standards/operation-id-naming`
-
-Run the same command again:
-
-```bash
-docker run --rm -v ./demo/rules-intro:/usr/src/app specmatic/enterprise lint openapi.yaml --config specmatic-linter.yaml
-```
-
-```terminaloutput
-Target: openapi.yaml
-Maturity Level: Non compliant
-Errors: 34, Warnings: 50, Ignored: 0
-Status: FAILED
-```
-
-You should now see violations that require JavaScript-based evaluation, including:
-
-- a derived `operationId` naming check reported as a warning
-- a pagination safety rule that validates `limit + offset` reported as an error
-
-Custom JavaScript rules are useful when a rule depends on cross-field logic, computed values, or dynamic expectations that the YAML DSL cannot express cleanly.
-
-For more detail, see [demo/rules-intro/custom-js-rule-anatomy.md](demo/rules-intro/custom-js-rule-anatomy.md).
 
 ## 2. Maturity Levels
 
@@ -412,14 +380,14 @@ In [demo/rule-types/specmatic-linter.yaml](demo/rule-types/specmatic-linter.yaml
 ```yaml
     types:
       - examples
-``` 
+```
 with
 
 ```yaml
     types:
       - examples
       - schema
-``` 
+```
 
 Run the same command again:
 
@@ -525,7 +493,7 @@ This walkthrough uses the public repo:
 
 ```bash
 docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterprise lint openapi.yaml \
-  --config-repo-url=https://github.com/specmatic/central-linter-config.git 
+  --config-repo-url=https://github.com/specmatic/central-linter-config.git
 ```
 
 ```terminaloutput
