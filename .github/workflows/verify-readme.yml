@@ -1,0 +1,23 @@
+name: Validate README
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate-readme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Verify Docker is available
+        run: docker --version
+
+      - name: Validate README workflow
+        env:
+          CENTRAL_CONFIG_REPO_TOKEN: ${{ secrets.CENTRAL_CONFIG_REPO_TOKEN }}
+        run: node scripts/verify-readme.js

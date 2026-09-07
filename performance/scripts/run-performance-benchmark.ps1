@@ -52,7 +52,7 @@ $argumentList = @(
     "specmatic/enterprise",
     "lint"
 )
-$argumentList += $specFiles | ForEach-Object { $_.Name }
+$argumentList += $specFiles | ForEach-Object { "specs/$($_.Name)" }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $process = Start-Process -FilePath "docker" -ArgumentList $argumentList -WorkingDirectory $perfDir -RedirectStandardOutput $benchmarkResultFile -RedirectStandardError $stderrFile -NoNewWindow -PassThru

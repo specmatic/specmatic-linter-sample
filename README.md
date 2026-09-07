@@ -537,7 +537,7 @@ docker run --rm -v "./demo/central-config-repo:/usr/src/app" specmatic/enterpris
 ```terminaloutput
 Target: openapi.yaml
 Maturity Level: Non compliant
-Errors: 15, Warnings: 15, Ignored: 2
+Errors: 15, Warnings: 14, Ignored: 2
 Status: FAILED
 ```
 
