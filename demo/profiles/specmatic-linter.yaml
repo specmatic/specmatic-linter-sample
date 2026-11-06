@@ -57,7 +57,7 @@ profiles:
       override:
         operation-summary:
           severity: error
-          maturity: bronze
+          maturity: baseline
         operation-4xx-problem-details-rfc7807:
           severity: error
           maturity: gold
