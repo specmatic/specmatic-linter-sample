@@ -7,7 +7,7 @@ profiles:
       override:
         operation-summary:
           severity: error
-          maturity: bronze
+          maturity: baseline
         info-license:
           severity: error
           maturity: gold
