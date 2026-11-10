@@ -50,17 +50,22 @@ function verify(name, source, expected, args = [], edit, ruleIds = []) {
   assert.ok(result.output.includes(`Errors: ${expected.totals.errors}, Warnings: ${expected.totals.warnings}, Ignored: ${expected.totals.ignored}`), `${name}: totals changed\n${result.output}`);
   assert.match(result.output, /Status: FAILED/, `${name}: status changed`);
 
-  if (args.includes('--format=html')) {
-    assert.ok(findFile(work, 'lint-report-openapi.html'), `${name}: HTML report missing`);
-  } else {
-    const reportFile = findFile(work, 'lint-report-openapi.json');
-    assert.ok(reportFile, `${name}: JSON report missing\n${result.output}`);
-    const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
-    assert.deepEqual(report.totals, expected.totals, `${name}: JSON totals changed`);
-    assert.equal(report.maturity.level, expected.maturity, `${name}: JSON maturity changed`);
-    for (const ruleId of ruleIds) {
-      assert.ok(report.problems.some(problem => problem.ruleId === ruleId), `${name}: ${ruleId} missing`);
-    }
+  const reportFile = findFile(work, 'lint-report-openapi.sarif');
+  assert.ok(reportFile, `${name}: SARIF report missing\n${result.output}`);
+  assert.ok(findFile(work, 'index.html'), `${name}: HTML report missing`);
+  const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+  assert.equal(report.version, '2.1.0', `${name}: SARIF version changed`);
+  const [reportRun] = report.runs;
+  assert.ok(reportRun.properties.tags.includes(`specmatic.maturity:${expected.maturity}`), `${name}: SARIF maturity changed`);
+  const reportTotals = { errors: 0, warnings: 0, ignored: 0 };
+  for (const finding of reportRun.results) {
+    if (finding.suppressions?.some(suppression => suppression.status === 'accepted')) reportTotals.ignored++;
+    else if (finding.level === 'error') reportTotals.errors++;
+    else if (finding.level === 'warning') reportTotals.warnings++;
+  }
+  assert.deepEqual(reportTotals, expected.totals, `${name}: SARIF totals changed`);
+  for (const ruleId of ruleIds) {
+    assert.ok(reportRun.results.some(finding => finding.ruleId === ruleId), `${name}: ${ruleId} missing`);
   }
   console.log(`PASS ${name}`);
   passed++;
@@ -77,38 +82,37 @@ const configurable = file => {
 const examples = file => replace(file, '#    types:\n#      - examples', '    types:\n      - examples');
 
 try {
-  verify('rules starter', 'demo/rules-intro', { totals: totals(6, 4), maturity: 'Silver' }, ['--config', 'specmatic-linter.yaml']);
-  verify('rules starter html', 'demo/rules-intro', { totals: totals(6, 4), maturity: 'Silver' }, ['--config', 'specmatic-linter.yaml', '--format=html']);
-  verify('rules recommended', 'demo/rules-intro', { totals: totals(30, 49), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml'], recommended);
-  verify('rules configurable', 'demo/rules-intro', { totals: totals(33, 49), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml'], configurable,
+  verify('rules starter', 'demo/rules-intro', { totals: totals(6, 4), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml']);
+  verify('rules recommended', 'demo/rules-intro', { totals: totals(30, 49), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml'], recommended);
+  verify('rules configurable', 'demo/rules-intro', { totals: totals(33, 49), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml'], configurable,
     ['rule/no-error-param', 'rule/parameter-description-required', 'rule/force-oidc-auth']);
 
-  verify('maturity baseline', 'demo/maturity', { totals: totals(2, 0), maturity: 'Baseline' }, ['--config', 'specmatic-linter.yaml']);
-  verify('maturity bronze', 'demo/maturity', { totals: totals(2, 0), maturity: 'Bronze' }, ['--config', 'specmatic-linter.yaml'],
-    file => replace(file, '          maturity: bronze', '          maturity: silver'));
-  verify('maturity silver', 'demo/maturity', { totals: totals(1, 1), maturity: 'Silver' }, ['--config', 'specmatic-linter.yaml'], file => {
-    replace(file, '          maturity: bronze', '          maturity: silver');
+  verify('maturity initial', 'demo/maturity', { totals: totals(2, 0), maturity: 'non-conformant' }, ['--config', 'specmatic-linter.yaml']);
+  verify('maturity raised tier', 'demo/maturity', { totals: totals(2, 0), maturity: 'non-conformant' }, ['--config', 'specmatic-linter.yaml'],
+    file => replace(file, '          maturity: baseline', '          maturity: silver'));
+  verify('maturity warning', 'demo/maturity', { totals: totals(1, 1), maturity: 'non-conformant' }, ['--config', 'specmatic-linter.yaml'], file => {
+    replace(file, '          maturity: baseline', '          maturity: silver');
     replace(file, '        operation-summary:\n          severity: error', '        operation-summary:\n          severity: warn');
   });
 
-  verify('types all', 'demo/rule-types', { totals: totals(20, 23), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml']);
-  verify('types examples', 'demo/rule-types', { totals: totals(1, 2), maturity: 'Baseline' }, ['--config', 'specmatic-linter.yaml'], examples);
-  verify('types examples schema', 'demo/rule-types', { totals: totals(11, 8), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml'], file => {
+  verify('types all', 'demo/rule-types', { totals: totals(20, 23), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml']);
+  verify('types examples', 'demo/rule-types', { totals: totals(1, 2), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml'], examples);
+  verify('types examples schema', 'demo/rule-types', { totals: totals(11, 8), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml'], file => {
     examples(file);
     replace(file, '    types:\n      - examples', '    types:\n      - examples\n      - schema');
   });
 
-  verify('profiles default', 'demo/profiles', { totals: totals(9, 12), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml']);
-  verify('profiles internal', 'demo/profiles', { totals: totals(9, 12, 2), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml', '--profile', 'internal']);
-  verify('profiles public', 'demo/profiles', { totals: totals(13, 11), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml', '--profile', 'public-api']);
-  verify('profiles public tweaked', 'demo/profiles', { totals: totals(12, 12), maturity: 'Non compliant' }, ['--config', 'specmatic-linter.yaml', '--profile', 'public-api'],
+  verify('profiles default', 'demo/profiles', { totals: totals(9, 12), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml']);
+  verify('profiles internal', 'demo/profiles', { totals: totals(9, 12, 2), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml', '--profile', 'internal']);
+  verify('profiles public', 'demo/profiles', { totals: totals(13, 11), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml', '--profile', 'public-api']);
+  verify('profiles public tweaked', 'demo/profiles', { totals: totals(12, 12), maturity: 'baseline' }, ['--config', 'specmatic-linter.yaml', '--profile', 'public-api'],
     file => replace(file, '        operation-summary: error\n        info-contact: error', '        operation-summary: warn\n        info-contact: error'));
 
-  const central = { totals: totals(11, 13), maturity: 'Non compliant' };
+  const central = { totals: totals(11, 13), maturity: 'baseline' };
   const repo = '--config-repo-url=https://github.com/specmatic/central-linter-config.git';
   verify('central default', 'demo/central-config-repo', central, [repo]);
   verify('central explicit config', 'demo/central-config-repo', central, [repo, '--config=specmatic-linter.yaml']);
-  verify('central internal', 'demo/central-config-repo', { totals: totals(15, 14, 2), maturity: 'Non compliant' }, [repo, '--profile=internal-api']);
+  verify('central internal', 'demo/central-config-repo', { totals: totals(15, 14, 2), maturity: 'baseline' }, [repo, '--profile=internal-api']);
 
   if (process.argv.includes('--all')) {
     const work = path.join(tempRoot, 'performance');
